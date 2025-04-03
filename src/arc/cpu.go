@@ -1,5 +1,11 @@
 package arc
 
+import (
+	"cgbemu/src/instructions"
+	"fmt"
+	"log"
+)
+
 // CGB memory goes from 0x0000 to 0xFFFF.
 const MaxMem = 1024 * 64
 
@@ -103,4 +109,59 @@ type CPU struct {
     Registers   RegisterFile
 
     IDU uint16
+}
+
+// PrintStatus prints registers values on Stdout.
+func (cpu *CPU) PrintStatus() {
+    fmt.Println("PC: ",     cpu.Registers.PC)
+    fmt.Println("SP: ",     cpu.Registers.PC)
+    fmt.Println("Flags: ",  cpu.Registers.F)
+}
+
+// Execute runs the fetch-decode loop.
+// It fetches the instruction byte and then, based on the opcode fetched, 
+// executes the corresponding instruction.
+// It returns the number of cycles used, for Testing purposes.
+func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
+
+    cyclesUsed = cycles
+
+    
+    // Can we get stuck in infinite loop if we pass more cycles than expected?
+    // Not for now because since memory is initialised to 0, if we try to fetch a 
+    // byte from one more cell memory where we are not supposed to be, it fetches 0 and
+    // exits the switch loop with the default case.
+    for cycles > 0 {
+
+        // Fetch Instruction, it takes up to one clock cycle.
+        // PC++
+        // THIS IS TRUE FOR EVERY OPCODE! TAKE THIS INTO ACCOUNT.
+        ins := cpu.FetchByte(&cycles)
+
+        // Decode instruction.
+        switch ins {
+            
+        case instructions.LDB_IM:
+            // Load to the 8-bit register B, the immediate data n.
+            cyclesNeeded := 2
+
+            // FetchByte takes up one cycle.
+            cpu.Registers.B = cpu.FetchByte(&cyclesNeeded)
+
+            // Length: 2 bytes, opcode + n.
+            // Cycles: 2 machine cycles.
+        default:
+        log.Println("At memory address: ", cpu.Registers.PC)
+
+        // TODO: Should it stop and Fatal or just keep going till next valid instruction?
+        log.Fatalln("Unknown opcode: ", ins)}
+    }
+
+    // If the number of cycles used is correct, respectively to the instruction used, 
+    // the return should be the original value, passed when calling Execute().
+    // When testing the instruction, we make sure that the expected value returned by Execute()
+    // matches the cycles needed for the instructions, based on official documentation.
+    cyclesUsed -= cycles
+
+    return
 }
