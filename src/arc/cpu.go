@@ -3,14 +3,15 @@ package arc
 // CGB memory goes from 0x0000 to 0xFFFF.
 const MaxMem = 1024 * 64
 
+// 8-bit data bus, 16-bit address bus (output only).
 type Memory struct {
-    Data    [MaxMem]byte
+    RAM    [MaxMem]byte
 }
 
 // Init initializes the memory to zero.
-func (m *Memory) Init(){
+func (m *Memory) ClearRAM(){
     for i:=0; i<MaxMem; i++ {
-        m.Data[i] = 0
+        m.RAM[i] = 0
     }
 }
 
@@ -39,11 +40,39 @@ type RegisterFile struct {
     H byte      //
     L byte      // HL
 
-    F FlagRegister      // Flags
+    F byte      // Flags
 
     // Special purpose 8-bit registers.
     IR byte     // Interrupt Register.
     IE byte     // Interrupt Enable.
+}
+
+// Initial registers values depend on the GameBoy Model.
+// For the CGB mode:
+// AF -> 0x1180
+// BC -> 0x0000
+// DE -> 0xFF56
+// HL -> 0x000D
+// SP -> 0xFFFE
+// PC -> 0x0100
+// We are skipping the Boot ROM istructions.
+func (r *RegisterFile) InitRegisters() {
+
+    r.A = byte(0b00010001) // 0x11
+    r.F = byte(0b10000000) // 0x80
+
+    r.B = byte(0x00)
+    r.C = byte(0x00)
+
+    r.D = byte(0xFF)
+    r.E = byte(0x56)
+
+    r.H = byte(0x00)
+    r.L = byte(0x0D)
+
+    r.SP = 0xFFFE
+
+    r.PC = 0x0100
 }
 
 // FlagRegister contains informations about the last instruction that affected the flags.
@@ -52,8 +81,7 @@ type RegisterFile struct {
 //
 // The F register can't be accessed normally, only by doing a “push af/pop bc”, for example. The lower
 // four bits are always zero, even if a “pop af” instruction tries to write other values.
-type FlagRegister struct {
-
+/*
     Z uint  // Bit 7: Zero Flag.
     N uint  // Bit 6: Add/Sub Flag (BCD).
     H uint  // Bit 5: Half Carry Flag (BCD).
@@ -62,8 +90,12 @@ type FlagRegister struct {
     U2 uint // Unused (always zero).
     U1 uint // Unused (always zero).
     U0 uint // Unused (always zero).
-}
-
+*/
+// To access the F register, use bitwise operations.
+// GET Flag:    & 0x80, &0x40, &0x20, &0x10 for Bit 7, Bit 6, Bit 5 , Bit 4.
+// SET Flag:    |= 0x80, |= 0x40, |= 0x20, |= 0x10. 1 | 1 = 1, 0 | 1 = 1 so it does set nonetheless.
+// CLEAR Flag:  &= ^0x80 and so on...
+// ^ operator INVERTS all the bits.
 type CPU struct {
 
     Memory      Memory
