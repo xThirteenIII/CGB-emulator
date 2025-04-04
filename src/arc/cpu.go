@@ -138,9 +138,9 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
     // exits the switch loop with the default case.
     for cycles > 0 {
 
-        // Fetch Instruction, it takes up to one clock cycle.
-        // PC++
-        // THIS IS TRUE FOR EVERY OPCODE! TAKE THIS INTO ACCOUNT.
+        // For each byte of the current instrunction length, a FetchByte() operation is needed.
+        //
+        // Read opcode, 1 cycle used.
         ins := cpu.FetchByte(&cycles)
 
         // Decode instruction.
@@ -161,6 +161,18 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             cycles--
             // Length: 1 byte, opcode.
             // Cycles: 2 machine cycles.
+        case instructions.LDBC_d16: // Load the 2 bytes of immediate data into register pair BC. Little-endian.
+
+            // Read LSB from memory.
+            nn_lsb := cpu.FetchByte(&cycles)
+
+            // Read MSB from memory.
+            nn_msb := cpu.FetchByte(&cycles)
+
+            // Assign values to registers.
+            cpu.LDrr_nn(&cpu.Registers.B, &cpu.Registers.C, nn_msb, nn_lsb)
+            // Length: 3 bytes, opcode + LSB(nn) + MSB(nn).
+            // Cycles: 3 machine cycles.
         default:
 
         log.Println("At memory address: ", cpu.Registers.PC)
