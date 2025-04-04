@@ -21,6 +21,12 @@ func (m *Memory) ClearRAM(){
     }
 }
 
+// ResetCPU clears RAM (everything to 0) and loads initial values to registers.
+func (cpu *CPU) ResetCPU() {
+    cpu.Memory.ClearRAM()
+    cpu.Registers.InitRegisters()
+}
+
 // The CGB CPU is an 8-bit 8080-like Sharp CPU (speculated to be a SM83 core).
 //
 // Main sub-systems of a SM83:
@@ -125,7 +131,6 @@ func (cpu *CPU) PrintStatus() {
 func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
     cyclesUsed = cycles
-
     
     // Can we get stuck in infinite loop if we pass more cycles than expected?
     // Not for now because since memory is initialised to 0, if we try to fetch a 
@@ -141,16 +146,23 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
         // Decode instruction.
         switch ins {
             
-        case instructions.LDB_IM:
-            // Load to the 8-bit register B, the immediate data n.
-            cyclesNeeded := 2
+        case instructions.LDB_IM: // Load to the 8-bit register B, the immediate data n.
 
             // FetchByte takes up one cycle.
-            cpu.Registers.B = cpu.FetchByte(&cyclesNeeded)
+            cpu.LDr8_n8(&cpu.Registers.B, cpu.FetchByte(&cycles))
 
             // Length: 2 bytes, opcode + n.
             // Cycles: 2 machine cycles.
+        case instructions.LDB_HL: // Load to the 8-bit register B, data from the absolute address specified by the 16-bit register HL.
+
+            cpu.LDr8_HL(&cpu.Registers.B)
+
+            // Remember to take up one cycle for the load operation.
+            cycles--
+            // Length: 1 byte, opcode.
+            // Cycles: 2 machine cycles.
         default:
+
         log.Println("At memory address: ", cpu.Registers.PC)
 
         // TODO: Should it stop and Fatal or just keep going till next valid instruction?
@@ -162,6 +174,12 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
     // When testing the instruction, we make sure that the expected value returned by Execute()
     // matches the cycles needed for the instructions, based on official documentation.
     cyclesUsed -= cycles
-
+    
+    // e.g. cpu.Execute(2) when executing 0x06 (LDB_IM):
+    //      cyclesUsed = cycles = 2
+    //      executing LDB_IM consumes 2 machine cycles.
+    //      cycles becomes 0.
+    //      cyclesUsed = cyclesUsed - 0
+    //      return
     return
 }
