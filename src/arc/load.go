@@ -20,3 +20,8 @@ func (cpu *CPU) LDr8_r8(loadFrom, loadInto *byte) {
 func (cpu *CPU) HL() uint16 {
     return uint16(cpu.Registers.H) << 8 | uint16(cpu.Registers.L)
 }
+
+// Load to the 16-bit register rr, the immediate 16-bit data nn.
+func (cpu *CPU) LDrr_nn(register *uint16, nn uint16) {
+    *register = nn
+}
