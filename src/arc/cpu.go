@@ -120,7 +120,7 @@ type CPU struct {
 // PrintStatus prints registers values on Stdout.
 func (cpu *CPU) PrintStatus() {
     fmt.Println("PC: ",     cpu.Registers.PC)
-    fmt.Println("SP: ",     cpu.Registers.PC)
+    fmt.Println("SP: ",     cpu.Registers.SP)
     fmt.Println("Flags: ",  cpu.Registers.F)
 }
 
@@ -149,13 +149,15 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
         case instructions.LDB_IM: // Load to the 8-bit register B, the immediate data n.
 
             // FetchByte takes up one cycle.
-            cpu.LDr8_n8(&cpu.Registers.B, cpu.FetchByte(&cycles))
+            n8 := cpu.FetchByte(&cycles)
+            cpu.Registers.B = n8
 
             // Length: 2 bytes, opcode + n.
             // Cycles: 2 machine cycles.
         case instructions.LDB_HL: // Load to the 8-bit register B, data from the absolute address specified by the 16-bit register HL.
 
-            cpu.LDr8_HL(&cpu.Registers.B)
+            cpu.Registers.B = cpu.Memory.RAM[cpu.HL()]
+            cpu.Registers.PC++
 
             // Remember to take up one cycle for the load operation.
             cycles--
@@ -169,10 +171,37 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             // Read MSB from memory.
             nn_msb := cpu.FetchByte(&cycles)
 
-            // Assign values to registers.
-            cpu.LDrr_nn(&cpu.Registers.B, &cpu.Registers.C, nn_msb, nn_lsb)
+            cpu.Registers.B = nn_msb
+            cpu.Registers.C = nn_lsb
             // Length: 3 bytes, opcode + LSB(nn) + MSB(nn).
             // Cycles: 3 machine cycles.
+        case instructions.LDBC_A: // Load to the absolute address specified by the 16-bit register BC, data from the 8-bit A register.
+
+            cpu.WriteByteToMemory(&cycles, cpu.BC(), cpu.Registers.A)
+
+            // Length: 1 byte, opcode.
+            // Cycles: 2 machine cycles.
+        case instructions.LDa16_SP: // Load to the absolute address specified by the 16-bit operand nn, data from the 16-bit SP register.
+
+            // Read address lsb
+            nn_lsb := cpu.FetchByte(&cycles)
+            // Read address msb
+            nn_msb := cpu.FetchByte(&cycles)
+
+            // Compose absolute address.
+            nn := GetUint16AddressFromLSBAndMSB(nn_lsb, nn_msb)
+
+            // Write Stack Pointer LSB first.
+            cpu.WriteByteToMemory(&cycles, nn, byte(cpu.Registers.SP & 0xFF))
+
+            // Increment address by 1.
+            nn = nn+1
+
+            // Write Stack Pointer MSB last.
+            cpu.WriteByteToMemory(&cycles, nn, byte(cpu.Registers.SP >> 8))
+
+            // Length: 3 bytes, opcode + lsb + msb
+            // Cycles: 5 machine cycles. opcode, R, R, W, W.
         default:
 
         log.Println("At memory address: ", cpu.Registers.PC)

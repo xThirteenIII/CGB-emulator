@@ -32,14 +32,17 @@ func (cpu *CPU) FetchWord(cycles *int) uint16 {
         log.Fatalf("Program Counter exceeded max memory.")
     }
 
+    // Read LSB
     lsb := cpu.Memory.RAM[cpu.Registers.PC]
     cpu.Registers.PC++ 
     *cycles--
 
+    // Read MSB
     msb := cpu.Memory.RAM[cpu.Registers.PC]
     cpu.Registers.PC++
     *cycles--
 
+    // Compose unsigned 16 bit word
     word := uint16(msb) << 8 | uint16(lsb)
 
     return word

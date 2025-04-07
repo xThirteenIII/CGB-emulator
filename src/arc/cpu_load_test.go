@@ -49,7 +49,7 @@ func TestLDB_HL(t *testing.T) {
     }
 }
 
-func TestLDrr_nn(t *testing.T) {
+func TestLDBC_d16(t *testing.T) {
 
     cpu := InitSM83()
     
@@ -72,3 +72,36 @@ func TestLDrr_nn(t *testing.T) {
         t.Error("BC register should be 0x7252, instead got: ", BC)
     }
 }
+
+// Testa16_SP verifies that data from the SP register is loaded into the absolute address specified in memory.
+// Test functions need capital letters after 'test'????? WHAAAAAAAAAAAAAAAT
+func TestA16_SP(t *testing.T) {
+
+    cpu := InitSM83()
+    
+    // Given
+    // SP = 0xFFFE
+    cpu.Memory.RAM[0x0100] = instructions.LDa16_SP
+    cpu.Memory.RAM[0x0101] = 0x52
+    cpu.Memory.RAM[0x0102] = 0x72
+
+    // 0x5555 data into 7252
+
+    // When
+    expectedCycles := 5
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Memory.RAM[0x7252] != 0xFE {
+        t.Error("Address 0x7252 should be 0xFE.")
+    }
+
+    if cpu.Memory.RAM[0x7253] != 0xFF {
+        t.Error("Address 0x7253 should be 0xFF.")
+    }
+}
+
+
