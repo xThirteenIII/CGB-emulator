@@ -154,3 +154,25 @@ func TestLDC_d8(t *testing.T) {
         t.Error("C register should be 0x33, instead got: ", cpu.Registers.C)
     }
 }
+
+func TestLDDE_d16(t *testing.T) {
+
+    cpu := InitSM83()
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDDE_d16
+    cpu.Memory.RAM[0x0101] = 0x52
+    cpu.Memory.RAM[0x0102] = 0x72
+
+    // When
+    expectedCycles := 3
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.DE() != 0x7252{
+        t.Error("DE register should be 0x7252, instead got: ", cpu.DE())
+    }
+}

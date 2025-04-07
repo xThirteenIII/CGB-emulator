@@ -213,6 +213,18 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 2 bytes, opcode + n.
             // Cycles: 2 machine cycles. opcode, R
+        case instructions.LDDE_d16: // Load the 2 bytes of immediate data into register pair DE. Little-endian.
+
+            // Read LSB from memory.
+            nn_lsb := cpu.FetchByte(&cycles)
+
+            // Read MSB from memory.
+            nn_msb := cpu.FetchByte(&cycles)
+
+            cpu.Registers.D = nn_msb
+            cpu.Registers.E = nn_lsb
+            // Length: 3 bytes, opcode + LSB(nn) + MSB(nn).
+            // Cycles: 3 machine cycles.
         default:
 
         log.Println("At memory address: ", cpu.Registers.PC)
