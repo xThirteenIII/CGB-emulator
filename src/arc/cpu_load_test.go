@@ -106,7 +106,7 @@ func TestA16_SP(t *testing.T) {
 }
 
 // TestA_BC verifies that data at the absolute address stored in the BC register is loaded into the A register.
-func TestA_BC(t *testing.T) {
+func TestLDA_BC(t *testing.T) {
 
     cpu := InitSM83()
 
@@ -248,5 +248,32 @@ func TestLD_d8(t *testing.T) {
 
     if cpu.Registers.D != 0x33 {
         t.Error("D register should be 0x33, instead got: ", cpu.Registers.D)
+    }
+}
+
+// TestA_BC verifies that data at the absolute address stored in the BC register is loaded into the A register.
+func TestLDA_DE(t *testing.T) {
+
+    cpu := InitSM83()
+
+    cpu.Registers.D = 0x56
+    cpu.Registers.E = 0xF6
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDA_DE
+    cpu.Memory.RAM[0x56F6] = 0x55
+
+    // 0x5555 data into 7252
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.A != 0x55 {
+        t.Error("A register should be 0x55.")
     }
 }
