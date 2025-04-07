@@ -270,6 +270,13 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             cpu.Registers.H = cpu.FetchByte(&cycles)
             // Length: 2 bytes, opcode + n.
             // Cycles: 2 machine cycles. opcode, R.
+        case instructions.LDA_HLinc:   // Load to the 8-bit A register, data from the absolute address specified by the 16-bit register HL.
+                                      // The value of HL is incremented after the memory read.
+
+            cpu.Registers.A = cpu.ReadByteFromMemory(&cycles, cpu.HL())
+            Increment16Address(&cpu.Registers.L, &cpu.Registers.H)
+            // Length: 1 byte.
+            // Cycles: 2 machine cycles. opcode + W.
         default:
 
         log.Println("At memory address: ", cpu.Registers.PC)

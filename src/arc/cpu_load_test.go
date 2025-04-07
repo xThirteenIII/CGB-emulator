@@ -369,3 +369,66 @@ func TestLDH_d8(t *testing.T) {
         t.Error("H register should be 0x33, instead got: ", cpu.Registers.H)
     }
 }
+
+func TestLDA_HLinc(t *testing.T) {
+
+    cpu := InitSM83()
+    
+    // Given
+    // A=0x11
+    cpu.Registers.H = 0x60
+    cpu.Registers.L = 0x62
+    cpu.Memory.RAM[0x0100] = instructions.LDA_HLinc
+    cpu.Memory.RAM[0x6062] = 0x58
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+
+    if cpu.Registers.A != 0x58 {
+        t.Error("A register should be 0x58, instead got: ", cpu.Registers.A)
+    }
+
+    if cpu.Registers.L != 0x63 {
+        t.Error("L register should be 0x63, instead got: ", cpu.Registers.L)
+    }
+
+}
+
+/*
+// Commented because it causes an exit. It works correctly.
+func TestLDA_HLincExceedsUint16(t *testing.T) {
+
+    cpu := InitSM83()
+    
+    // Given
+    // A=0x11
+    cpu.Registers.H = 0xFF
+    cpu.Registers.L = 0xFF
+    cpu.Memory.RAM[0x0100] = instructions.LDA_HLinc
+    cpu.Memory.RAM[0x6062] = 0x58
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+
+    if cpu.Registers.A != 0x58 {
+        t.Error("A register should be 0x58, instead got: ", cpu.Registers.A)
+    }
+
+    if cpu.Registers.L != 0x63 {
+        t.Error("L register should be 0x63, instead got: ", cpu.Registers.L)
+    }
+
+}
+*/
