@@ -225,6 +225,12 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             cpu.Registers.E = nn_lsb
             // Length: 3 bytes, opcode + LSB(nn) + MSB(nn).
             // Cycles: 3 machine cycles.
+        case instructions.LDDE_A:   // Load to the absolute address specified by the 16-bit register DE, data from the 8-bit A register.
+
+            cpu.WriteByteToMemory(&cycles, cpu.DE(), cpu.Registers.A)
+
+            // Length: 1 bytes, opcode + LSB(nn) + MSB(nn).
+            // Cycles: 2 machine cycles. opcode, R.
         default:
 
         log.Println("At memory address: ", cpu.Registers.PC)

@@ -132,6 +132,58 @@ func TestA_BC(t *testing.T) {
     }
 }
 
+// TestLDBC_A verifies that the content stored in the A register is loaded at the absolute address stored in the BC register.
+func TestLDBC_A (t *testing.T) {
+
+    cpu := InitSM83()
+
+    // A = 0x11
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDBC_A
+
+    // 0x5555 data into 7252
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Memory.RAM[cpu.BC()] != 0x11 {
+        t.Error("BC register should be 0x11.")
+    }
+
+}
+
+func TestLDDE_A (t *testing.T) {
+
+    cpu := InitSM83()
+
+    // A = 0x11
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDDE_A
+
+    // 0x5555 data into 7252
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Memory.RAM[cpu.DE()] != 0x11 {
+        t.Error("BC register should be 0x11.")
+    }
+
+}
+
+
 
 func TestLDC_d8(t *testing.T) {
 
