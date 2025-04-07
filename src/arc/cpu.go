@@ -265,7 +265,7 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             Increment16Address(&cpu.Registers.L, &cpu.Registers.H)
             // Length: 1 byte.
             // Cycles: 2 machine cycles. opcode + W.
-        case instructions.LDH_d8:   // Load the 8-bit immediate operand d8 into register C.
+        case instructions.LDH_d8:   // Load the 8-bit immediate operand d8 into register H.
 
             cpu.Registers.H = cpu.FetchByte(&cycles)
             // Length: 2 bytes, opcode + n.
@@ -277,6 +277,11 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             Increment16Address(&cpu.Registers.L, &cpu.Registers.H)
             // Length: 1 byte.
             // Cycles: 2 machine cycles. opcode + W.
+        case instructions.LDL_d8:   // Load the 8-bit immediate operand d8 into register L.
+
+            cpu.Registers.L = cpu.FetchByte(&cycles)
+            // Length: 2 bytes, opcode + n.
+            // Cycles: 2 machine cycles. opcode, R.
         default:
 
         log.Println("At memory address: ", cpu.Registers.PC)

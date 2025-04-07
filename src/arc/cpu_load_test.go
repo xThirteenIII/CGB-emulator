@@ -432,3 +432,25 @@ func TestLDA_HLincExceedsUint16(t *testing.T) {
 
 }
 */
+
+func TestLDL_d8(t *testing.T) {
+
+    cpu := InitSM83()
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDL_d8
+    cpu.Memory.RAM[0x0101] = 0x33
+
+    // Setting more cycles than needed, will make the Execute() return with "unknown opcode: 0".
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.L != 0x33 {
+        t.Error("L register should be 0x33, instead got: ", cpu.Registers.L)
+    }
+}
