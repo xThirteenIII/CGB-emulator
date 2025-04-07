@@ -229,7 +229,12 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             cpu.WriteByteToMemory(&cycles, cpu.DE(), cpu.Registers.A)
 
-            // Length: 1 bytes, opcode + LSB(nn) + MSB(nn).
+            // Length: 1 byte.
+            // Cycles: 2 machine cycles. opcode, R.
+        case instructions.LDD_d8:   // Load to the absolute address specified by the 16-bit register DE, data from the 8-bit A register.
+
+            cpu.Registers.D = cpu.FetchByte(&cycles)
+            // Length: 2 bytes, opcode + n.
             // Cycles: 2 machine cycles. opcode, R.
         default:
 

@@ -228,3 +228,25 @@ func TestLDDE_d16(t *testing.T) {
         t.Error("DE register should be 0x7252, instead got: ", cpu.DE())
     }
 }
+
+func TestLD_d8(t *testing.T) {
+
+    cpu := InitSM83()
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDD_d8
+    cpu.Memory.RAM[0x0101] = 0x33
+
+    // Setting more cycles than needed, will make the Execute() return with "unknown opcode: 0".
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.D != 0x33 {
+        t.Error("D register should be 0x33, instead got: ", cpu.Registers.D)
+    }
+}
