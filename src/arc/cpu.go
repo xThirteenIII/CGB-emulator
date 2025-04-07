@@ -259,7 +259,7 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             // Length: 3 bytes, opcode + LSB(nn) + MSB(nn).
             // Cycles: 3 machine cycles.
         case instructions.LDHLinc_A: // Load to the absolute address specified by the 16-bit register HL, data from the 8-bit A register.
-                                    // The value of HL is decremented after the memory write.
+                                    // The value of HL is incremented after the memory write.
 
             cpu.WriteByteToMemory(&cycles, cpu.HL(), cpu.Registers.A)
             Increment16Address(&cpu.Registers.L, &cpu.Registers.H)
@@ -282,6 +282,13 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             cpu.Registers.L = cpu.FetchByte(&cycles)
             // Length: 2 bytes, opcode + n.
             // Cycles: 2 machine cycles. opcode, R.
+        case instructions.LDHLdec_A: // Load to the absolute address specified by the 16-bit register HL, data from the 8-bit A register.
+                                    // The value of HL is decremented after the memory write.
+
+            cpu.WriteByteToMemory(&cycles, cpu.HL(), cpu.Registers.A)
+            Decrement16Address(&cpu.Registers.L, &cpu.Registers.H)
+            // Length: 1 byte.
+            // Cycles: 2 machine cycles. opcode + W.
         default:
 
         log.Println("At memory address: ", cpu.Registers.PC)

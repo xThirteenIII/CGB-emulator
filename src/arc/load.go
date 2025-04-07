@@ -34,3 +34,16 @@ func Increment16Address(lsb , msb *byte) {
     *msb = byte(absoluteAddress >> 8)
     *lsb = byte(absoluteAddress & 0xFF)
 }
+
+// Increment16Address increments absolute address, given lsb and msb.
+func Decrement16Address(lsb , msb *byte) {
+
+    absoluteAddress := (uint16(*msb) << 8) | uint16(*lsb)
+    if absoluteAddress == 0x0000 {
+        log.Fatalf("16-bit register overflowed")
+    }
+    absoluteAddress--
+
+    *msb = byte(absoluteAddress >> 8)
+    *lsb = byte(absoluteAddress & 0xFF)
+}
