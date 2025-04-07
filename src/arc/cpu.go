@@ -207,6 +207,12 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             cpu.Registers.A = cpu.ReadByteFromMemory(&cycles, cpu.BC())
             // Length: 1 byte.
             // Cycles: 2 machine cycles. opcode, R
+        case instructions.LDC_d8: // Load the 8-bit immediate operand d8 into register C.
+            
+            cpu.Registers.C = cpu.FetchByte(&cycles)
+
+            // Length: 2 bytes, opcode + n.
+            // Cycles: 2 machine cycles. opcode, R
         default:
 
         log.Println("At memory address: ", cpu.Registers.PC)

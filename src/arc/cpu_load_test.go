@@ -133,3 +133,24 @@ func TestA_BC(t *testing.T) {
 }
 
 
+func TestLDC_d8(t *testing.T) {
+
+    cpu := InitSM83()
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDC_d8
+    cpu.Memory.RAM[0x0101] = 0x33
+
+    // Setting more cycles than needed, will make the Execute() return with "unknown opcode: 0".
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.C != 0x33 {
+        t.Error("C register should be 0x33, instead got: ", cpu.Registers.C)
+    }
+}
