@@ -183,8 +183,6 @@ func TestLDDE_A (t *testing.T) {
 
 }
 
-
-
 func TestLDC_d8(t *testing.T) {
 
     cpu := InitSM83()
@@ -347,5 +345,27 @@ func TestLDHLinc_A(t *testing.T) {
 
     if cpu.Memory.RAM[cpu.HL()-1] != 0x11 {
         t.Error("Memory address at HL - 1 should be 0x11, instead got: ", cpu.Memory.RAM[cpu.HL()-1])
+    }
+}
+
+func TestLDH_d8(t *testing.T) {
+
+    cpu := InitSM83()
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDH_d8
+    cpu.Memory.RAM[0x0101] = 0x33
+
+    // Setting more cycles than needed, will make the Execute() return with "unknown opcode: 0".
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.H != 0x33 {
+        t.Error("H register should be 0x33, instead got: ", cpu.Registers.H)
     }
 }
