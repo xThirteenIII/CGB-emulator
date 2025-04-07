@@ -258,6 +258,13 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             cpu.Registers.L = nn_lsb
             // Length: 3 bytes, opcode + LSB(nn) + MSB(nn).
             // Cycles: 3 machine cycles.
+        case instructions.LDHLinc_A: // Load to the absolute address specified by the 16-bit register HL, data from the 8-bit A register.
+                                    // The value of HL is decremented after the memory write.
+
+            cpu.WriteByteToMemory(&cycles, cpu.HL(), cpu.Registers.A)
+            Increment16Address(&cpu.Registers.L, &cpu.Registers.H)
+            // Length: 1 byte.
+            // Cycles: 2 machine cycles. opcode + W.
         default:
 
         log.Println("At memory address: ", cpu.Registers.PC)

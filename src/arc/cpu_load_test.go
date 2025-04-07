@@ -321,3 +321,31 @@ func TestLDHL_d16(t *testing.T) {
         t.Error("HL register should be 0x7252, instead got: ", cpu.HL())
     }
 }
+
+func TestLDHLinc_A(t *testing.T) {
+
+    cpu := InitSM83()
+    
+    // Given
+    // A=0x11
+    cpu.Registers.H = 0x60
+    cpu.Registers.L = 0x62
+    cpu.Memory.RAM[0x0100] = instructions.LDHLinc_A
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+
+    if cpu.HL() != 0x6063{
+        t.Error("HL register should be 0x6063, instead got: ", cpu.HL())
+    }
+
+    if cpu.Memory.RAM[cpu.HL()-1] != 0x11 {
+        t.Error("Memory address at HL - 1 should be 0x11, instead got: ", cpu.Memory.RAM[cpu.HL()-1])
+    }
+}
