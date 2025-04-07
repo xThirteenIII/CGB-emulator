@@ -13,6 +13,7 @@ func TestLDBImmediate(t *testing.T) {
     cpu.Memory.RAM[0x0100] = instructions.LDB_IM
     cpu.Memory.RAM[0x0101] = 0xF2
 
+    // Setting more cycles than needed, will make the Execute() return with "unknown opcode: 0".
     // When
     expectedCycles := 2
     cyclesUsed := cpu.Execute(expectedCycles)
@@ -101,6 +102,33 @@ func TestA16_SP(t *testing.T) {
 
     if cpu.Memory.RAM[0x7253] != 0xFF {
         t.Error("Address 0x7253 should be 0xFF.")
+    }
+}
+
+// TestA_BC verifies that data at the absolute address stored in the BC register is loaded into the A register.
+func TestA_BC(t *testing.T) {
+
+    cpu := InitSM83()
+
+    cpu.Registers.B = 0x56
+    cpu.Registers.C = 0xF6
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDA_BC
+    cpu.Memory.RAM[0x56F6] = 0x55
+
+    // 0x5555 data into 7252
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.A != 0x55 {
+        t.Error("A register should be 0x55.")
     }
 }
 

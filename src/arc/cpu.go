@@ -200,8 +200,13 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             // Write Stack Pointer MSB last.
             cpu.WriteByteToMemory(&cycles, nn, byte(cpu.Registers.SP >> 8))
 
-            // Length: 3 bytes, opcode + lsb + msb
+            // Length: 3 bytes, opcode + lsb + msb.
             // Cycles: 5 machine cycles. opcode, R, R, W, W.
+        case instructions.LDA_BC:// Load to the 8-bit A register, data from the absolute address specified by the 16-bit register BC.
+
+            cpu.Registers.A = cpu.ReadByteFromMemory(&cycles, cpu.BC())
+            // Length: 1 byte.
+            // Cycles: 2 machine cycles. opcode, R
         default:
 
         log.Println("At memory address: ", cpu.Registers.PC)
