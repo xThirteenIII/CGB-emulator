@@ -1,7 +1,5 @@
 package arc
 
-import "log"
-
 // HL returns the HL content in 16 bit.
 func (cpu *CPU) HL() uint16 {
     return uint16(cpu.Registers.H) << 8 | uint16(cpu.Registers.L)
@@ -23,12 +21,10 @@ func GetUint16AddressFromLSBAndMSB(lsb, msb byte) uint16 {
 }
 
 // Increment16Address increments absolute address, given lsb and msb.
+// TODO: Does HL=0xFFFF + 1 = 0000? Or need to handle exception?
 func Increment16Address(lsb , msb *byte) {
 
     absoluteAddress := (uint16(*msb) << 8) | uint16(*lsb)
-    if absoluteAddress == 0xFFFF {
-        log.Fatalf("16-bit register overflowed")
-    }
     absoluteAddress++
 
     *msb = byte(absoluteAddress >> 8)
@@ -39,9 +35,6 @@ func Increment16Address(lsb , msb *byte) {
 func Decrement16Address(lsb , msb *byte) {
 
     absoluteAddress := (uint16(*msb) << 8) | uint16(*lsb)
-    if absoluteAddress == 0x0000 {
-        log.Fatalf("16-bit register overflowed")
-    }
     absoluteAddress--
 
     *msb = byte(absoluteAddress >> 8)

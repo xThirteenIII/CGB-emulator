@@ -436,6 +436,22 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
         case instructions.LDA_A:
             cpu.Registers.A = cpu.Registers.A   // Lenght: 1 byte.
                                                 // Cycles: 1 cycle.
+        case instructions.LDa8_A:
+            //Load to the address specified by the 8-bit immediate data n, data from the 8-bit A register. The
+            //full 16-bit absolute address is obtained by setting the most significant byte to 0xFF and the
+            //least significant byte to the value of n, so the possible range is 0xFF00-0xFFFF.
+            //
+            //Should specify a 16-bit address in the mnemonic portion for a8, although the immediate operand only has the lower-order 8 bits.
+
+            //0xFF00-0xFF7F: Port/Mode registers, control register, sound register
+            //0xFF80-0xFFFE: Working & Stack RAM (127 bytes)
+            //0xFFFF: Interrupt Enable Register
+
+            // Length: 2 bytes, opcode+n.
+            // Cycles: 3 cycles, opcode + R + W
+            n := cpu.FetchByte(&cycles)
+            absoluteAddress := 0xFF00 | uint16(n)
+            cpu.WriteByteToMemory(&cycles, absoluteAddress, cpu.Registers.A)
         default:
 
         log.Println("At memory address: ", cpu.Registers.PC)

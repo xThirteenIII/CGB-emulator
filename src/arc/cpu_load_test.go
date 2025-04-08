@@ -1781,27 +1781,28 @@ func TestLDA_HL(t *testing.T) {
     }
 
     if cpu.Registers.A != 0x20 {
-        t.Error("A register should be 0x20, instead got: ", cpu.Registers.A)
+        t.Error("A register should be 0x20, instead got: ", cpu.Registers.B)
     }
 }
 
-func TestLDA_A(t *testing.T) {
+func TestLDa8_A(t *testing.T) {
 
     cpu := InitSM83()
-    cpu.Registers.A = 0x69
+    cpu.Registers.A = 0x77
     
     // Given
-    cpu.Memory.RAM[0x0100] = instructions.LDA_A
+    cpu.Memory.RAM[0x0100] = instructions.LDa8_A
+    cpu.Memory.RAM[0x0101] = 0x22
 
     // When
-    expectedCycles := 1
+    expectedCycles := 3
     cyclesUsed := cpu.Execute(expectedCycles)
 
     if cyclesUsed != expectedCycles {
         t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
     }
 
-    if cpu.Registers.A != 0x69 {
-        t.Error("A register should be 0x69, instead got: ", cpu.Registers.A)
+    if cpu.Memory.RAM[0xFF22] != 0x77 {
+        t.Error("Memory cell at 0xFF22 should be 0x77, instead got: ", cpu.Memory.RAM[0xFF22])
     }
 }
