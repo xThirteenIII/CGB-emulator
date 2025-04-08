@@ -454,15 +454,24 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             cpu.WriteByteToMemory(&cycles, absoluteAddress, cpu.Registers.A)
         case instructions.LDSP_d16: // Load to the 16-bit register rr, the immediate 16-bit data nn.
 
-        nn_lsb := cpu.FetchByte(&cycles)
-        nn_msb := cpu.FetchByte(&cycles)
+            nn_lsb := cpu.FetchByte(&cycles)
+            nn_msb := cpu.FetchByte(&cycles)
 
-        nn := GetUint16AddressFromLSBAndMSB(nn_lsb, nn_msb)
+            nn := GetUint16AddressFromLSBAndMSB(nn_lsb, nn_msb)
 
-        cpu.Registers.SP = nn
+            cpu.Registers.SP = nn
 
             // Length: 3 bytes, opcode+lsb(n)+msb(n).
             // Cycles: 3 cycles, opcode + R + R
+        case instructions.LDCind_A: //Load to the address specified by the 8-bit C register, data from the 8-bit A register. The full
+                                    //16-bit absolute address is obtained by setting the most significant byte to 0xFF and the least
+                                    //significant byte to the value of C, so the possible range is 0xFF00-0xFFFF.
+
+            absoluteAddress := 0xFF00 | uint16(cpu.Registers.C)
+            cpu.WriteByteToMemory(&cycles, absoluteAddress, cpu.Registers.A)
+
+            // Length: 1 bytes, opcode
+            // Cycles: 2 cycles, opcode + R
         default:
 
         log.Println("At memory address: ", cpu.Registers.PC)

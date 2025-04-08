@@ -1850,3 +1850,25 @@ func TestSP_d16(t *testing.T) {
     }
 
 }
+
+func TestLDCind_A(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.A = 0x77
+    cpu.Registers.C = 0xA2
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDCind_A
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Memory.RAM[0xFFA2] != 0x77 {
+        t.Error("Memory cell at 0xFF22 should be 0x77, instead got: ", cpu.Memory.RAM[0xFF22])
+    }
+}
