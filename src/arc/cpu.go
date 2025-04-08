@@ -306,6 +306,21 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             cpu.Registers.A = cpu.FetchByte(&cycles)
             // Length: 2 bytes, opcode + n.
             // Cycles: 2 machine cycles. opcode, R.
+        case instructions.LDB_B:
+            cpu.Registers.B = cpu.Registers.B
+        case instructions.LDB_C:
+            cpu.Registers.B = cpu.Registers.C
+        case instructions.LDB_D:
+            cpu.Registers.B = cpu.Registers.D
+        case instructions.LDB_E:
+            cpu.Registers.B = cpu.Registers.E
+        case instructions.LDB_H:
+            cpu.Registers.B = cpu.Registers.H
+        case instructions.LDB_L:
+            cpu.Registers.B = cpu.Registers.L
+        case instructions.LDB_A:
+            cpu.Registers.B = cpu.Registers.A   // Lenght: 1 byte.
+                                                // Cycles: 1 cycle.
         default:
 
         log.Println("At memory address: ", cpu.Registers.PC)
