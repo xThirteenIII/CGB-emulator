@@ -156,11 +156,8 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             // Cycles: 2 machine cycles.
         case instructions.LDB_HL: // Load to the 8-bit register B, data from the absolute address specified by the 16-bit register HL.
 
-            cpu.Registers.B = cpu.Memory.RAM[cpu.HL()]
-            cpu.Registers.PC++
+            cpu.Registers.B = cpu.ReadByteFromMemory(&cycles, cpu.HL())
 
-            // Remember to take up one cycle for the load operation.
-            cycles--
             // Length: 1 byte, opcode.
             // Cycles: 2 machine cycles.
         case instructions.LDBC_d16: // Load the 2 bytes of immediate data into register pair BC. Little-endian.
@@ -320,6 +317,23 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             cpu.Registers.B = cpu.Registers.L
         case instructions.LDB_A:
             cpu.Registers.B = cpu.Registers.A   // Lenght: 1 byte.
+                                                // Cycles: 1 cycle.
+        case instructions.LDC_B:
+            cpu.Registers.C = cpu.Registers.B
+        case instructions.LDC_C:
+            cpu.Registers.C = cpu.Registers.C
+        case instructions.LDC_D:
+            cpu.Registers.C = cpu.Registers.D
+        case instructions.LDC_E:
+            cpu.Registers.C = cpu.Registers.E
+        case instructions.LDC_H:
+            cpu.Registers.C = cpu.Registers.H
+        case instructions.LDC_L:
+            cpu.Registers.C = cpu.Registers.L
+        case instructions.LDC_HL:
+            cpu.Registers.C = cpu.ReadByteFromMemory(&cycles, cpu.HL())
+        case instructions.LDC_A:
+            cpu.Registers.C = cpu.Registers.A   // Lenght: 1 byte.
                                                 // Cycles: 1 cycle.
         default:
 

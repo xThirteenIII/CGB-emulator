@@ -656,6 +656,7 @@ func TestLDB_E(t *testing.T) {
         t.Error("B register should be 0x69, instead got: ", cpu.Registers.B)
     }
 }
+
 func TestLDB_A(t *testing.T) {
 
     cpu := InitSM83()
@@ -674,5 +675,175 @@ func TestLDB_A(t *testing.T) {
 
     if cpu.Registers.B != 0x69 {
         t.Error("B register should be 0x69, instead got: ", cpu.Registers.B)
+    }
+}
+
+func TestLDC_B(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.B = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDC_B
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.C != 0x69 {
+        t.Error("C register should be 0x69, instead got: ", cpu.Registers.C)
+    }
+}
+
+func TestLDC_C(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.C = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDC_C
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.C != 0x69 {
+        t.Error("C register should be 0x69, instead got: ", cpu.Registers.C)
+    }
+}
+
+func TestLDC_D(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.D = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDC_D
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.C != 0x69 {
+        t.Error("C register should be 0x69, instead got: ", cpu.Registers.C)
+    }
+}
+
+func TestLDC_E(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.E = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDC_E
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.C != 0x69 {
+        t.Error("C register should be 0x69, instead got: ", cpu.Registers.C)
+    }
+}
+
+func TestLDC_H(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.H = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDC_H
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.C != 0x69 {
+        t.Error("C register should be 0x69, instead got: ", cpu.Registers.C)
+    }
+}
+
+func TestLDC_L(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.L = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDC_L
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.C != 0x69 {
+        t.Error("C register should be 0x69, instead got: ", cpu.Registers.C)
+    }
+}
+
+func TestLDC_HL(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.H = 0x20
+    cpu.Registers.L = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDC_HL
+    cpu.Memory.RAM[0x2069] = 0x69
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.C != 0x69 {
+        t.Error("C register should be 0x69, instead got: ", cpu.Registers.C)
+    }
+}
+
+func TestLDC_A(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.A = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDC_A
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.C != 0x69 {
+        t.Error("C register should be 0x69, instead got: ", cpu.Registers.C)
     }
 }
