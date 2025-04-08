@@ -352,6 +352,23 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
         case instructions.LDD_A:
             cpu.Registers.D = cpu.Registers.A   // Lenght: 1 byte.
                                                 // Cycles: 1 cycle.
+        case instructions.LDE_B:
+            cpu.Registers.E = cpu.Registers.B
+        case instructions.LDE_C:
+            cpu.Registers.E = cpu.Registers.C
+        case instructions.LDE_D:
+            cpu.Registers.E = cpu.Registers.D
+        case instructions.LDE_E:
+            cpu.Registers.E = cpu.Registers.E
+        case instructions.LDE_H:
+            cpu.Registers.E = cpu.Registers.H
+        case instructions.LDE_L:
+            cpu.Registers.E = cpu.Registers.L
+        case instructions.LDE_HL:
+            cpu.Registers.E = cpu.ReadByteFromMemory(&cycles, cpu.HL())
+        case instructions.LDE_A:
+            cpu.Registers.E = cpu.Registers.A   // Lenght: 1 byte.
+                                                // Cycles: 1 cycle.
         default:
 
         log.Println("At memory address: ", cpu.Registers.PC)
