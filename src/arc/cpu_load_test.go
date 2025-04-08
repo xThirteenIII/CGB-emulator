@@ -1785,6 +1785,27 @@ func TestLDA_HL(t *testing.T) {
     }
 }
 
+func TestLDA_A(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.A = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDA_A
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.A != 0x69 {
+        t.Error("A register should be 0x69, instead got: ", cpu.Registers.A)
+    }
+}
+
 func TestLDa8_A(t *testing.T) {
 
     cpu := InitSM83()
@@ -1805,4 +1826,27 @@ func TestLDa8_A(t *testing.T) {
     if cpu.Memory.RAM[0xFF22] != 0x77 {
         t.Error("Memory cell at 0xFF22 should be 0x77, instead got: ", cpu.Memory.RAM[0xFF22])
     }
+}
+
+func TestSP_d16(t *testing.T) {
+
+    cpu := InitSM83()
+
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDSP_d16
+    cpu.Memory.RAM[0x0101] = 0x22
+    cpu.Memory.RAM[0x0102] = 0x80
+
+    // When
+    expectedCycles := 3
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.SP != 0x8022 {
+        t.Error("SP register should be 0x8022, instead got: ", cpu.Registers.SP)
+    }
+
 }
