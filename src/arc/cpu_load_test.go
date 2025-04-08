@@ -513,3 +513,24 @@ func TestLDA_HLdec(t *testing.T) {
 
 }
 
+func TestLDA_d8(t *testing.T) {
+
+    cpu := InitSM83()
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDA_d8
+    cpu.Memory.RAM[0x0101] = 0x33
+
+    // Setting more cycles than needed, will make the Execute() return with "unknown opcode: 0".
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.A != 0x33 {
+        t.Error("A register should be 0x33, instead got: ", cpu.Registers.A)
+    }
+}
