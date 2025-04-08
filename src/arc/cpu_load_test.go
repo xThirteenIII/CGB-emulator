@@ -1333,3 +1333,149 @@ func TestLDH_HL(t *testing.T) {
         t.Error("H register should be 0x20, instead got: ", cpu.Registers.H)
     }
 }
+
+func TestLDL_B(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.B = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDL_B
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.L != 0x69 {
+        t.Error("L register should be 0x69, instead got: ", cpu.Registers.L)
+    }
+}
+
+func TestLDL_C(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.C = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDL_C
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.L != 0x69 {
+        t.Error("L register should be 0x69, instead got: ", cpu.Registers.L)
+    }
+}
+func TestLDL_D(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.D = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDL_D
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.L != 0x69 {
+        t.Error("L register should be 0x69, instead got: ", cpu.Registers.L)
+    }
+}
+func TestLDL_E(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.E = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDL_E
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.L != 0x69 {
+        t.Error("L register should be 0x69, instead got: ", cpu.Registers.L)
+    }
+}
+func TestLDL_H(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.H = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDL_H
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.L != 0x69 {
+        t.Error("L register should be 0x69, instead got: ", cpu.Registers.L)
+    }
+}
+
+func TestLDL_L(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.L = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDL_L
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.L != 0x69 {
+        t.Error("L register should be 0x69, instead got: ", cpu.Registers.L)
+    }
+}
+
+func TestLDL_HL(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.H = 0x80
+    cpu.Registers.L = 0x8F
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDL_HL
+    cpu.Memory.RAM[0x808F] = 0x20
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.L != 0x20 {
+        t.Error("L register should be 0x20, instead got: ", cpu.Registers.L)
+    }
+}
