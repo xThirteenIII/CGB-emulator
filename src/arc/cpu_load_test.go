@@ -1479,3 +1479,329 @@ func TestLDL_HL(t *testing.T) {
         t.Error("L register should be 0x20, instead got: ", cpu.Registers.L)
     }
 }
+
+func TestLDHL_B(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.H = 0x11
+    cpu.Registers.L = 0x69
+    cpu.Registers.B = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDHL_B
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Memory.RAM[cpu.HL()] != 0x69 {
+        t.Error("Memory address at  HL register should be 0x69, instead got: ", cpu.Memory.RAM[cpu.HL()])
+    }
+}
+
+func TestLDHL_C(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.H = 0x11
+    cpu.Registers.L = 0x69
+    cpu.Registers.C = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDHL_C
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Memory.RAM[cpu.HL()] != 0x69 {
+        t.Error("Memory address at  HL register should be 0x69, instead got: ", cpu.Memory.RAM[cpu.HL()])
+    }
+}
+
+func TestLDHL_D(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.H = 0x11
+    cpu.Registers.L = 0x69
+    cpu.Registers.D = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDHL_D
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Memory.RAM[cpu.HL()] != 0x69 {
+        t.Error("Memory address at  HL register should be 0x69, instead got: ", cpu.Memory.RAM[cpu.HL()])
+    }
+}
+
+func TestLDHL_E(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.H = 0x11
+    cpu.Registers.L = 0x69
+    cpu.Registers.E = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDHL_E
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Memory.RAM[cpu.HL()] != 0x69 {
+        t.Error("Memory address at  HL register should be 0x69, instead got: ", cpu.Memory.RAM[cpu.HL()])
+    }
+}
+
+func TestLDHL_H(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.H = 0x11
+    cpu.Registers.L = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDHL_H
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Memory.RAM[cpu.HL()] != 0x11 {
+        t.Error("Memory address at  HL register should be 0x11, instead got: ", cpu.Memory.RAM[cpu.HL()])
+    }
+}
+
+func TestLDHL_L(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.H = 0x11
+    cpu.Registers.L = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDHL_L
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Memory.RAM[cpu.HL()] != 0x69 {
+        t.Error("Memory address at  HL register should be 0x69, instead got: ", cpu.Memory.RAM[cpu.HL()])
+    }
+}
+
+func TestLDHL_A(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.H = 0x11
+    cpu.Registers.L = 0x69
+    cpu.Registers.A = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDHL_A
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Memory.RAM[cpu.HL()] != 0x69 {
+        t.Error("Memory address at  HL register should be 0x69, instead got: ", cpu.Memory.RAM[cpu.HL()])
+    }
+}
+
+func TestLDA_B(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.B = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDA_B
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.A != 0x69 {
+        t.Error("A register should be 0x69, instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestLDA_C(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.C = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDA_C
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.A != 0x69 {
+        t.Error("A register should be 0x69, instead got: ", cpu.Registers.A)
+    }
+}
+func TestLDA_D(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.D = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDA_D
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.A != 0x69 {
+        t.Error("A register should be 0x69, instead got: ", cpu.Registers.A)
+    }
+}
+func TestLDA_E(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.E = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDA_E
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.A != 0x69 {
+        t.Error("A register should be 0x69, instead got: ", cpu.Registers.A)
+    }
+}
+func TestLDA_H(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.H = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDA_H
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.A != 0x69 {
+        t.Error("A register should be 0x69, instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestLDA_L(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.L = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDA_L
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.A != 0x69 {
+        t.Error("A register should be 0x69, instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestLDA_HL(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.H = 0x80
+    cpu.Registers.L = 0x8F
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDA_HL
+    cpu.Memory.RAM[0x808F] = 0x20
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.A != 0x20 {
+        t.Error("A register should be 0x20, instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestLDA_A(t *testing.T) {
+
+    cpu := InitSM83()
+    cpu.Registers.A = 0x69
+    
+    // Given
+    cpu.Memory.RAM[0x0100] = instructions.LDA_A
+
+    // When
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.A != 0x69 {
+        t.Error("A register should be 0x69, instead got: ", cpu.Registers.A)
+    }
+}

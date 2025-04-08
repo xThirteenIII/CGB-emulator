@@ -403,6 +403,39 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
         case instructions.LDL_A:
             cpu.Registers.L = cpu.Registers.A   // Lenght: 1 byte.
                                                 // Cycles: 1 cycle.
+        case instructions.LDHL_B:
+            cpu.WriteByteToMemory(&cycles, cpu.HL(), cpu.Registers.B)
+        case instructions.LDHL_C:
+            cpu.WriteByteToMemory(&cycles, cpu.HL(), cpu.Registers.C)
+        case instructions.LDHL_D:
+            cpu.WriteByteToMemory(&cycles, cpu.HL(), cpu.Registers.D)
+        case instructions.LDHL_E:
+            cpu.WriteByteToMemory(&cycles, cpu.HL(), cpu.Registers.E)
+        case instructions.LDHL_H:
+            cpu.WriteByteToMemory(&cycles, cpu.HL(), cpu.Registers.H)
+        case instructions.LDHL_L:
+            cpu.WriteByteToMemory(&cycles, cpu.HL(), cpu.Registers.L)
+        case instructions.LDHL_A:
+            cpu.WriteByteToMemory(&cycles, cpu.HL(), cpu.Registers.A)
+                                                // Lenght: 2 bytes.
+                                                // Cycles: 2 cycle.
+        case instructions.LDA_B:
+            cpu.Registers.A = cpu.Registers.B
+        case instructions.LDA_C:
+            cpu.Registers.A = cpu.Registers.C
+        case instructions.LDA_D:
+            cpu.Registers.A = cpu.Registers.D
+        case instructions.LDA_E:
+            cpu.Registers.A = cpu.Registers.E
+        case instructions.LDA_H:
+            cpu.Registers.A = cpu.Registers.H
+        case instructions.LDA_L:
+            cpu.Registers.A = cpu.Registers.L
+        case instructions.LDA_HL:
+            cpu.Registers.A = cpu.ReadByteFromMemory(&cycles, cpu.HL())
+        case instructions.LDA_A:
+            cpu.Registers.A = cpu.Registers.A   // Lenght: 1 byte.
+                                                // Cycles: 1 cycle.
         default:
 
         log.Println("At memory address: ", cpu.Registers.PC)
