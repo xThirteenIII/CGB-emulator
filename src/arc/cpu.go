@@ -472,12 +472,27 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode
             // Cycles: 2 cycles, opcode + R
+        case instructions.LDa16_A: // Load to the absolute address specified by the 16-bit operand nn, data from the A register.
+
+            // Read address lsb
+            nn_lsb := cpu.FetchByte(&cycles)
+            // Read address msb
+            nn_msb := cpu.FetchByte(&cycles)
+
+            // Compose absolute address.
+            nn := GetUint16AddressFromLSBAndMSB(nn_lsb, nn_msb)
+
+            // Write Stack Pointer MSB last.
+            cpu.WriteByteToMemory(&cycles, nn, cpu.Registers.A)
+
+            // Length: 3 bytes, opcode + lsb + msb.
+            // Cycles: 4 machine cycles. opcode, R, R, W.
         default:
 
-        log.Println("At memory address: ", cpu.Registers.PC)
+            log.Println("At memory address: ", cpu.Registers.PC)
 
-        // TODO: Should it stop and Fatal or just keep going till next valid instruction?
-        log.Fatalln("Unknown opcode: ", ins)}
+            // TODO: Should it stop and Fatal or just keep going till next valid instruction?
+            log.Fatalln("Unknown opcode: ", ins)}
     }
 
     // If the number of cycles used is correct, respectively to the instruction used, 

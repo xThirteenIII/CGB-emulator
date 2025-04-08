@@ -1872,3 +1872,28 @@ func TestLDCind_A(t *testing.T) {
         t.Error("Memory cell at 0xFF22 should be 0x77, instead got: ", cpu.Memory.RAM[0xFF22])
     }
 }
+
+func Testa16_A(t *testing.T) {
+
+    cpu := InitSM83()
+    
+    // Given
+    // A = 0x11
+    cpu.Memory.RAM[0x0100] = instructions.LDa16_A
+    cpu.Memory.RAM[0x0101] = 0x52
+    cpu.Memory.RAM[0x0102] = 0x72
+
+    // 0x5555 data into 7252
+
+    // When
+    expectedCycles := 4
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Memory.RAM[0x7252] != 0x11 {
+        t.Error("Address 0x7252 should be 0x11.")
+    }
+}
