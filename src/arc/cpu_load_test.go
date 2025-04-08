@@ -483,3 +483,33 @@ func TestLDHLdec_A(t *testing.T) {
     }
 }
 
+func TestLDA_HLdec(t *testing.T) {
+
+    cpu := InitSM83()
+    
+    // Given
+    // A=0x11
+    cpu.Registers.H = 0x60
+    cpu.Registers.L = 0x62
+    cpu.Memory.RAM[0x0100] = instructions.LDA_HLdec
+    cpu.Memory.RAM[0x6062] = 0x58
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+
+    if cpu.Registers.A != 0x58 {
+        t.Error("A register should be 0x58, instead got: ", cpu.Registers.A)
+    }
+
+    if cpu.Registers.L != 0x61 {
+        t.Error("L register should be 0x61, instead got: ", cpu.Registers.L)
+    }
+
+}
+
