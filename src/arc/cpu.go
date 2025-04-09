@@ -499,6 +499,15 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             
             // Length: 2 bytes, opcode + n
             // Cycles: 3 machine cycles. opcode, R, R.
+        case instructions.LDA_Cind:
+            // Load to the 8-bit A register, data from the address specified by the 8-bit C register. The full
+            // 16-bit absolute address is obtained by setting the most significant byte to 0xFF and the least
+            // significant byte to the value of C, so the possible range is 0xFF00-0xFFFF.
+            absoluteAddress := 0xFF00 | uint16(cpu.Registers.C)
+            cpu.Registers.A = cpu.ReadByteFromMemory(&cycles, absoluteAddress)
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 2 machine cycles. opcode, R.
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)
