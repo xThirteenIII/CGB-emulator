@@ -1944,3 +1944,28 @@ func TestA_Cind(t *testing.T) {
         t.Error("A register should be 0x69, instead got: ", cpu.Registers.A)
     }
 }
+
+func TestA_a16(t *testing.T) {
+
+    cpu := InitSM83()
+    
+    // Given
+    // A = 0x11
+    cpu.Memory.RAM[0x0100] = instructions.LDA_a16
+    cpu.Memory.RAM[0x0101] = 0x52
+    cpu.Memory.RAM[0x0102] = 0x53
+    cpu.Memory.RAM[0x5352] = 0x69
+
+
+    // When
+    expectedCycles := 4
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.A != 0x69{
+        t.Error("A register should be 0x69, instead got: ", cpu.Registers.A)
+    }
+}

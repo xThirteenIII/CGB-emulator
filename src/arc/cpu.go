@@ -508,6 +508,16 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode.
             // Cycles: 2 machine cycles. opcode, R.
+        case instructions.LDA_a16:
+            // Load to the 8-bit A register, data from the address specified by the 16-bit immediate data n.
+
+            nn_lsb := cpu.FetchByte(&cycles)
+            nn_msb := cpu.FetchByte(&cycles)
+
+            absoluteAddress := GetUint16AddressFromLSBAndMSB(nn_lsb, nn_msb)
+            cpu.Registers.A = cpu.ReadByteFromMemory(&cycles, absoluteAddress)
+            // Length: 3 bytes, opcode + lsb + msb
+            // Cycles: 4 machine cycles. opcode, R(lsb), R(msb), R(absAddr).
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)
