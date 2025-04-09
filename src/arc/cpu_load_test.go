@@ -1969,3 +1969,37 @@ func TestA_a16(t *testing.T) {
         t.Error("A register should be 0x69, instead got: ", cpu.Registers.A)
     }
 }
+
+func TestPOP_BC(t *testing.T) {
+
+    cpu := InitSM83()
+
+    // Given
+    // SP = 0xFFFE
+    cpu.Registers.C = 0x12
+    initialSP := cpu.Registers.SP
+    cpu.Memory.RAM[0x0100] = instructions.POP_BC
+    cpu.Memory.RAM[0xFFFE] = 0x30
+    cpu.Memory.RAM[0xFFFF] = 0x34
+
+    // When
+    expectedCycles := 3
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    // SP = 0x0000
+    if cpu.Registers.SP != initialSP + 2 {
+        t.Error("SP register should be ", cpu.Registers.SP + 2 , " at the end of the operation. Initial SP: ", initialSP, ", final SP: ", cpu.Registers.SP)
+    }
+
+    if cpu.Registers.C != 0x30 {
+        t.Error("C register should be 0x30, instead got: ", cpu.Registers.C)
+    }
+
+    if cpu.Registers.B != 0x34 {
+        t.Error("B register should be 0x34, instead got: ", cpu.Registers.B)
+    }
+}
