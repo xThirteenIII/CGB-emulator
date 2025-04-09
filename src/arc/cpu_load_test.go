@@ -1897,3 +1897,27 @@ func Testa16_A(t *testing.T) {
         t.Error("Address 0x7252 should be 0x11.")
     }
 }
+
+func TestA_a8(t *testing.T) {
+
+    cpu := InitSM83()
+    
+    // Given
+    // A = 0x11
+    cpu.Memory.RAM[0x0100] = instructions.LDA_a8
+    cpu.Memory.RAM[0x0101] = 0x52
+    cpu.Memory.RAM[0xFF52] = 0x69
+
+
+    // When
+    expectedCycles := 3
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.A != 0x69{
+        t.Error("A register should be 0x69, instead got: ", cpu.Registers.A)
+    }
+}
