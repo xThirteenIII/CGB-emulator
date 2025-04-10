@@ -2127,3 +2127,93 @@ func TestPOP_HL(t *testing.T) {
         t.Error("H register should be 0x34, instead got: ", cpu.Registers.H)
     }
 }
+
+func TestPUSH_HL(t *testing.T) {
+
+    cpu := InitSM83()
+
+    // Given
+    // SP = 0xFFFE
+    cpu.Registers.H = 0xA2
+    cpu.Registers.L = 0x12
+    initialSP := cpu.Registers.SP
+    cpu.Memory.RAM[0x0100] = instructions.PUSH_HL
+
+    // When
+    expectedCycles := 4
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Memory.RAM[initialSP - 1] != 0xA2 {
+        t.Error("Contents at SP-1 should be 0xA2, instead got: ", cpu.Memory.RAM[initialSP - 1])
+    }
+
+    if cpu.Memory.RAM[initialSP - 2] != 0x12 {
+        t.Error("Contents at SP-2 should be 0x12, instead got: ", cpu.Memory.RAM[initialSP - 2])
+    }
+}
+
+func TestPOP_AF(t *testing.T) {
+
+    cpu := InitSM83()
+
+    // Given
+    // SP = 0xFFFE
+    cpu.Registers.F = 0x12
+    initialSP := cpu.Registers.SP
+    cpu.Memory.RAM[0x0100] = instructions.POP_AF
+    cpu.Memory.RAM[0xFFFE] = 0x30
+    cpu.Memory.RAM[0xFFFF] = 0x34
+
+    // When
+    expectedCycles := 3
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    // SP = 0x0000
+    if cpu.Registers.SP != initialSP + 2 {
+        t.Error("SP register should be ", cpu.Registers.SP + 2 , " at the end of the operation. Initial SP: ", initialSP, ", final SP: ", cpu.Registers.SP)
+    }
+
+    if cpu.Registers.F != 0x30 {
+        t.Error("F register should be 0x30, instead got: ", cpu.Registers.F)
+    }
+
+    if cpu.Registers.A != 0x34 {
+        t.Error("A register should be 0x34, instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestPUSH_AF(t *testing.T) {
+
+    cpu := InitSM83()
+
+    // Given
+    // SP = 0xFFFE
+    cpu.Registers.A = 0xA2
+    cpu.Registers.F = 0x12
+    initialSP := cpu.Registers.SP
+    cpu.Memory.RAM[0x0100] = instructions.PUSH_AF
+
+    // When
+    expectedCycles := 4
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Memory.RAM[initialSP - 1] != 0xA2 {
+        t.Error("Contents at SP-1 should be 0xA2, instead got: ", cpu.Memory.RAM[initialSP - 1])
+    }
+
+    if cpu.Memory.RAM[initialSP - 2] != 0x12 {
+        t.Error("Contents at SP-2 should be 0x12, instead got: ", cpu.Memory.RAM[initialSP - 2])
+    }
+}
