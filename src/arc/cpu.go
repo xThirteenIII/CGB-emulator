@@ -6,6 +6,11 @@ import (
 	"log"
 )
 
+// Following these two docs for Instruction implementation:
+//
+// https://gekkio.fi/files/gb-docs/gbctr.pdf, for detailed operations.
+// https://meganesu.github.io/generate-gb-opcodes/
+
 // CGB memory goes from 0x0000 to 0xFFFF.
 const MaxMem = 1024 * 64
 
@@ -529,6 +534,19 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             cpu.Registers.C = lsb
             // Length: 1 byte
             // Cycles: 3 machine cycles. opcode, R(lsb), R(msb)
+        case instructions.PUSH_BC:
+            // Push to the stack memory, data from the 16-bit register BC.
+            //
+            // Push MSB first, id est B register.
+            // Since SP grows downward, msb is read first?
+            cpu.Registers.SP--
+            cycles-- // A cycle is consumed just for decrementing SP.
+            cpu.WriteByteToMemory(&cycles, cpu.Registers.SP, cpu.Registers.B)
+            cpu.Registers.SP--
+            cpu.WriteByteToMemory(&cycles, cpu.Registers.SP, cpu.Registers.C)
+
+            // Length: 1 byte
+            // Cycles: 4 machine cycles. opcode, W(lsb), W(msb), 
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)

@@ -2003,3 +2003,31 @@ func TestPOP_BC(t *testing.T) {
         t.Error("B register should be 0x34, instead got: ", cpu.Registers.B)
     }
 }
+
+func TestPUSH_BC(t *testing.T) {
+
+    cpu := InitSM83()
+
+    // Given
+    // SP = 0xFFFE
+    cpu.Registers.B = 0xA2
+    cpu.Registers.C = 0x12
+    initialSP := cpu.Registers.SP
+    cpu.Memory.RAM[0x0100] = instructions.PUSH_BC
+
+    // When
+    expectedCycles := 4
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Memory.RAM[initialSP - 1] != 0xA2 {
+        t.Error("Contents at SP-1 should be 0xA2, instead got: ", cpu.Memory.RAM[initialSP - 1])
+    }
+
+    if cpu.Memory.RAM[initialSP - 2] != 0x12 {
+        t.Error("Contents at SP-2 should be 0x12, instead got: ", cpu.Memory.RAM[initialSP - 2])
+    }
+}
