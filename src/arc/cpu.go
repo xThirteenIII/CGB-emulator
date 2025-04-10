@@ -558,6 +558,30 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             cpu.Registers.E = lsb
             // Length: 1 byte
             // Cycles: 3 machine cycles. opcode, R(lsb), R(msb)
+        case instructions.PUSH_DE:
+            // Push to the stack memory, data from the 16-bit register BC.
+            //
+            // Push MSB first, id est B register.
+            // Since SP grows downward, msb is read first?
+            cpu.Registers.SP--
+            cycles-- // A cycle is consumed just for decrementing SP.
+            cpu.WriteByteToMemory(&cycles, cpu.Registers.SP, cpu.Registers.D)
+            cpu.Registers.SP--
+            cpu.WriteByteToMemory(&cycles, cpu.Registers.SP, cpu.Registers.E)
+
+            // Length: 1 byte
+            // Cycles: 4 machine cycles. opcode, W(lsb), W(msb), 
+        case instructions.POP_HL:
+            // Pops to the 16-bit register rr, data from the stack memory.
+            // This instruction does not do calculations that affect flags, but POP AF completely replaces the
+            // F register value, so all flags are changed based on the 8-bit data that is read from memory.
+            lsb := cpu.PopFromSP(&cycles)
+            msb := cpu.PopFromSP(&cycles)
+
+            cpu.Registers.H = msb
+            cpu.Registers.L = lsb
+            // Length: 1 byte
+            // Cycles: 3 machine cycles. opcode, R(lsb), R(msb)
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)
