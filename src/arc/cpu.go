@@ -547,6 +547,17 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 byte
             // Cycles: 4 machine cycles. opcode, W(lsb), W(msb), 
+        case instructions.POP_DE:
+            // Pops to the 16-bit register rr, data from the stack memory.
+            // This instruction does not do calculations that affect flags, but POP AF completely replaces the
+            // F register value, so all flags are changed based on the 8-bit data that is read from memory.
+            lsb := cpu.PopFromSP(&cycles)
+            msb := cpu.PopFromSP(&cycles)
+
+            cpu.Registers.D = msb
+            cpu.Registers.E = lsb
+            // Length: 1 byte
+            // Cycles: 3 machine cycles. opcode, R(lsb), R(msb)
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)
