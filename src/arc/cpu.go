@@ -640,6 +640,14 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 2 bytes, opcode + n.
             // Cycles: 3 cycles, opcode + R + ??
+
+        case instructions.LDSP_HL: // Load to the 16-bit SP register, data from the 16-bit HL register.
+
+            cpu.Registers.L = byte(cpu.Registers.SP & 0xFF) // lsb
+            cpu.Registers.H = byte(cpu.Registers.SP >> 8)   // mbs
+            cycles--
+            // Length: 1 bytes, opcode.
+            // Cycles: 2 cycles, opcode + ?
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)

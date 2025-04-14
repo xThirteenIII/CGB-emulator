@@ -2343,3 +2343,34 @@ func TestLDHL_SPs8SetsHalfAndCarryFlagWithNegative8(t *testing.T) {
         t.Error("H flag should be set, instead got: ", cpu.Registers.F)
     }
 }
+
+func TestLDSP_HL(t *testing.T) {
+
+    cpu := InitSM83()
+
+    // Given
+    // SP = 0xFFFE
+    cpu.Memory.RAM[cpu.HL()] = 0x55
+    cpu.Memory.RAM[0x0100] = instructions.LDSP_HL
+
+    // -5 = 0xFB
+    // 0x0F + 0x0B = 0x1A > 0x0F -> sets Half-Carry
+
+    // 0xFF + 0xFB = 0x01FA > 0xFF -> sets Carry
+
+    // When
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.L != 0xFE {
+        t.Error("L register should be 0xFE, instead got: ", cpu.Registers.L)
+    }
+
+    if cpu.Registers.H != 0xFF {
+        t.Error("H register should be 0x00, instead got: ", cpu.Registers.H)
+    }
+}
