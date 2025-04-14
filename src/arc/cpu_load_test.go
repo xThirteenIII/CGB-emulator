@@ -2217,3 +2217,129 @@ func TestPUSH_AF(t *testing.T) {
         t.Error("Contents at SP-2 should be 0x12, instead got: ", cpu.Memory.RAM[initialSP - 2])
     }
 }
+
+func TestLDHL_SPs8SetsHalfCarryFlag(t *testing.T) {
+
+    cpu := InitSM83()
+
+    // Given
+    cpu.Registers.SP = 0x004F
+    cpu.Memory.RAM[0x0100] = instructions.LDHL_SPs8
+    cpu.Memory.RAM[0x0101] = 0x05
+
+
+    // When
+    expectedCycles := 3
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.L != 0x54 {
+        t.Error("L register should be 0x54, instead got: ", cpu.Registers.L)
+    }
+
+    if cpu.Registers.H != 0x00 {
+        t.Error("H register should be 0x00, instead got: ", cpu.Registers.H)
+    }
+
+    if cpu.Registers.F != 0b00100000 {
+        t.Error("H flag should be set, instead got: ", cpu.Registers.F)
+    }
+}
+
+func TestLDHL_SPs8SetsCarryFlag(t *testing.T) {
+
+    cpu := InitSM83()
+
+    // Given
+    cpu.Registers.SP = 0x00F4
+    cpu.Memory.RAM[0x0100] = instructions.LDHL_SPs8
+    cpu.Memory.RAM[0x0101] = 0x11
+
+    // When
+    expectedCycles := 3
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.L != 0x05 {
+        t.Error("L register should be 0x15, instead got: ", cpu.Registers.L)
+    }
+
+    if cpu.Registers.H != 0x01 {
+        t.Error("H register should be 0x00, instead got: ", cpu.Registers.H)
+    }
+
+    if cpu.Registers.F != 0b00010000 {
+        t.Error("H flag should be set, instead got: ", cpu.Registers.F)
+    }
+}
+
+func TestLDHL_SPs8SetsHalfAndCarryFlag(t *testing.T) {
+
+    cpu := InitSM83()
+
+    // Given
+    cpu.Registers.SP = 0x00FF
+    cpu.Memory.RAM[0x0100] = instructions.LDHL_SPs8
+    cpu.Memory.RAM[0x0101] = 0x11
+
+    // When
+    expectedCycles := 3
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.L != 0x10 {
+        t.Error("L register should be 0x10, instead got: ", cpu.Registers.L)
+    }
+
+    if cpu.Registers.H != 0x01 {
+        t.Error("H register should be 0x01, instead got: ", cpu.Registers.H)
+    }
+
+    if cpu.Registers.F != 0b00110000 {
+        t.Error("H flag should be set, instead got: ", cpu.Registers.F)
+    }
+}
+
+func TestLDHL_SPs8SetsHalfAndCarryFlagWithNegative8(t *testing.T) {
+
+    cpu := InitSM83()
+
+    // Given
+    cpu.Registers.SP = 0x00FF
+    cpu.Memory.RAM[0x0100] = instructions.LDHL_SPs8
+    cpu.Memory.RAM[0x0101] = 0b11111011 // (-5)
+
+    // -5 = 0xFB
+    // 0x0F + 0x0B = 0x1A > 0x0F -> sets Half-Carry
+
+    // 0xFF + 0xFB = 0x01FA > 0xFF -> sets Carry
+
+    // When
+    expectedCycles := 3
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.L != 0xFA {
+        t.Error("L register should be 0x10, instead got: ", cpu.Registers.L)
+    }
+
+    if cpu.Registers.H != 0x00 {
+        t.Error("H register should be 0x01, instead got: ", cpu.Registers.H)
+    }
+
+    if cpu.Registers.F != 0b00110000 {
+        t.Error("H flag should be set, instead got: ", cpu.Registers.F)
+    }
+}

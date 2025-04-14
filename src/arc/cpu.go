@@ -92,7 +92,6 @@ func (r *RegisterFile) InitRegisters() {
     r.PC = 0x0100
 }
 
-// FlagRegister contains informations about the last instruction that affected the flags.
 // The Zero Flag and the Carry Flag are used for conditional instructions.
 // The Carry flag is also used by arithmetic and logic instructions. The BCD Flags are used only by DAA instruction.
 //
@@ -618,6 +617,29 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 byte
             // Cycles: 4 machine cycles. opcode, W(lsb), W(msb), 
+        case instructions.LDHL_SPs8:
+            // Load to the HL register, 16-bit data calculated by adding the signed 8-bit operand s8 to the 16
+            // bit value of the SP register.
+            //
+            // Sets following flags: Z = 0, N = 0, H = star, C = star
+
+            s8 := int8(cpu.FetchByte(&cycles))
+
+            // flags will be either 0b0001000 or 0b10000000
+            // This way Z and N are set to 0, H and C set accordingly to operation.
+            // Last 4 bits are always 0.
+            result, flags := AddInt8ToUint16WithCarry(cpu.Registers.SP, s8)
+
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            cpu.Registers.L = byte(result & 0xFF) // lsb
+            cpu.Registers.H = byte(result >> 8)   // msb
+            cycles--
+
+            // Length: 2 bytes, opcode + n.
+            // Cycles: 3 cycles, opcode + R + ??
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)
