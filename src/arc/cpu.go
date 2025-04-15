@@ -654,6 +654,8 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             cpu.Registers.B = result // Update B.
             if result == 0 {
                 cpu.Registers.F |= 1 << 7 // Set Z flag.
+            }else {
+                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
             }
 
             // Clear N flag.
@@ -663,6 +665,23 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
                 cpu.Registers.F |= 1 << 5 // Set HalfCarry.
             }
 
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.DEC_B:
+
+            result, halfCarry := DecrementByteBy1(cpu.Registers.B)
+            cpu.Registers.B = result // Update B.
+            if result == 0 {
+                cpu.Registers.F |= 1 << 7 // Set Z flag.
+            }else {
+                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+            }
+
+            cpu.Registers.F |= 1 << 6 // Set N flag.
+
+            if halfCarry {
+                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+            }
 
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.

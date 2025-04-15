@@ -68,13 +68,13 @@ func AddInt8ToUint16WithCarry(value uint16, adder int8) (uint16, byte) {
 // It returns the result of the operation and a bool set to true if half carry happens.
 func IncrementByteBy1(value byte) (byte, bool) {
 
-    // Isolate four lower bits of the byte.
-    if ((value&0x0F) + 1) > 0x0F {
-
-        // Set halfCarryBit, which is bit 5
-        return value + 1, true
-    }
-
-    return value + 1, false
+    return value + 1, (value & 0x0F) + 1 > 0x0F
 }
 
+// DecrementByteBy1 subtracts 1 to the byte.
+// Half Carry happens when the lower 4 bits need to borrow 1 from the upper 4 bits.
+// E.g. 0x10 - 1 = 0x0F -> half carry set
+func DecrementByteBy1(value byte) (byte, bool) {
+
+    return value - 1, (value & 0x0F) == 0 // Half Carry happens only if value has the last 4 bits set to 0.
+}
