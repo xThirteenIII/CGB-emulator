@@ -631,7 +631,7 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             result, flags := AddInt8ToUint16WithCarry(cpu.Registers.SP, s8)
 
             cpu.Registers.F = 0x00
-            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
             cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
 
             cpu.Registers.L = byte(result & 0xFF) // lsb
@@ -648,6 +648,24 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             cycles--
             // Length: 1 bytes, opcode.
             // Cycles: 2 cycles, opcode + ?
+        case instructions.INC_B: // Increments data in the B register.
+
+            result, halfCarry := IncrementByteBy1(cpu.Registers.B)
+            cpu.Registers.B = result // Update B.
+            if result == 0 {
+                cpu.Registers.F |= 1 << 7 // Set Z flag.
+            }
+
+            // Clear N flag.
+            cpu.Registers.F &^= 1 << 6
+
+            if halfCarry {
+                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+            }
+
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)
