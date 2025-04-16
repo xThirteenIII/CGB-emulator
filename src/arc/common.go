@@ -78,3 +78,43 @@ func DecrementByteBy1(value byte) (byte, bool) {
 
     return value - 1, (value & 0x0F) == 0 // Half Carry happens only if value has the last 4 bits set to 0.
 }
+
+func (cpu *CPU) SetZflag() {
+    
+    cpu.Registers.F |= 1 << 7
+}
+
+func (cpu *CPU) SetNflag() {
+    
+    cpu.Registers.F |= 1 << 6
+}
+
+func (cpu *CPU) SetHflag() {
+    
+    cpu.Registers.F |= 1 << 5
+}
+
+func (cpu *CPU) SetCflag() {
+    
+    cpu.Registers.F |= 1 << 4
+}
+
+func (cpu *CPU) ClearZflag() {
+    
+    cpu.Registers.F &^= 1 << 7
+}
+
+func (cpu *CPU) ClearNflag() {
+    
+    cpu.Registers.F &^= 1 << 6
+}
+
+func (cpu *CPU) ClearHflag() {
+    
+    cpu.Registers.F &^= 1 << 5
+}
+
+func (cpu *CPU) ClearCflag() {
+    
+    cpu.Registers.F &^= 1 << 4
+}

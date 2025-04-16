@@ -654,16 +654,16 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             result, halfCarry := IncrementByteBy1(cpu.Registers.B)
             cpu.Registers.B = result // Update B.
             if result == 0 {
-                cpu.Registers.F |= 1 << 7 // Set Z flag.
+                cpu.SetZflag()
             }else {
-                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+                cpu.ClearZflag()
             }
 
             // Clear N flag.
-            cpu.Registers.F &^= 1 << 6
+            cpu.ClearNflag()
 
             if halfCarry {
-                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+                cpu.SetHflag()
             }
 
             // Length: 1 bytes, opcode.
@@ -673,15 +673,15 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             result, halfCarry := DecrementByteBy1(cpu.Registers.B)
             cpu.Registers.B = result // Update B.
             if result == 0 {
-                cpu.Registers.F |= 1 << 7 // Set Z flag.
+                cpu.SetZflag()
             }else {
-                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+                cpu.ClearZflag()
             }
 
-            cpu.Registers.F |= 1 << 6 // Set N flag.
+            cpu.SetNflag()
 
             if halfCarry {
-                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+                cpu.SetHflag()
             }
 
             // Length: 1 bytes, opcode.
@@ -691,16 +691,15 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             result, halfCarry := IncrementByteBy1(cpu.Registers.C)
             cpu.Registers.C = result // Update C.
             if result == 0 {
-                cpu.Registers.F |= 1 << 7 // Set Z flag.
+                cpu.SetZflag()
             }else {
-                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+                cpu.ClearZflag()
             }
 
-            // Clear N flag.
-            cpu.Registers.F &^= 1 << 6
+            cpu.ClearNflag()
 
             if halfCarry {
-                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+                cpu.SetHflag()
             }
 
             // Length: 1 bytes, opcode.
@@ -710,15 +709,15 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             result, halfCarry := DecrementByteBy1(cpu.Registers.C)
             cpu.Registers.C = result // Update C.
             if result == 0 {
-                cpu.Registers.F |= 1 << 7 // Set Z flag.
+                cpu.SetZflag()
             }else {
-                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+                cpu.ClearZflag()
             }
 
-            cpu.Registers.F |= 1 << 6 // Set N flag.
+            cpu.SetNflag()
 
             if halfCarry {
-                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+                cpu.SetHflag()
             }
 
             // Length: 1 bytes, opcode.
@@ -728,16 +727,15 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             result, halfCarry := IncrementByteBy1(cpu.Registers.D)
             cpu.Registers.D = result // Update D.
             if result == 0 {
-                cpu.Registers.F |= 1 << 7 // Set Z flag.
+                cpu.SetZflag()
             }else {
-                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+                cpu.ClearZflag()
             }
 
-            // Clear N flag.
-            cpu.Registers.F &^= 1 << 6
+            cpu.ClearNflag()
 
             if halfCarry {
-                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+                cpu.SetHflag()
             }
 
             // Length: 1 bytes, opcode.
@@ -747,15 +745,15 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             result, halfCarry := DecrementByteBy1(cpu.Registers.D)
             cpu.Registers.D = result // Update D.
             if result == 0 {
-                cpu.Registers.F |= 1 << 7 // Set Z flag.
+                cpu.SetZflag()
             }else {
-                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+                cpu.ClearZflag()
             }
 
-            cpu.Registers.F |= 1 << 6 // Set N flag.
+            cpu.SetNflag()
 
             if halfCarry {
-                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+                cpu.SetHflag()
             }
 
             // Length: 1 bytes, opcode.
@@ -765,16 +763,15 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             result, halfCarry := IncrementByteBy1(cpu.Registers.E)
             cpu.Registers.E = result // Update E.
             if result == 0 {
-                cpu.Registers.F |= 1 << 7 // Set Z flag.
+                cpu.SetZflag()
             }else {
-                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+                cpu.ClearZflag()
             }
 
-            // Clear N flag.
-            cpu.Registers.F &^= 1 << 6
+            cpu.ClearNflag()
 
             if halfCarry {
-                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+                cpu.SetHflag()
             }
 
             // Length: 1 bytes, opcode.
@@ -784,15 +781,15 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             result, halfCarry := DecrementByteBy1(cpu.Registers.E)
             cpu.Registers.E = result // Update E.
             if result == 0 {
-                cpu.Registers.F |= 1 << 7 // Set Z flag.
+                cpu.SetZflag()
             }else {
-                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+                cpu.ClearZflag()
             }
 
-            cpu.Registers.F |= 1 << 6 // Set N flag.
+            cpu.SetNflag()
 
             if halfCarry {
-                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+                cpu.SetHflag()
             }
 
             // Length: 1 bytes, opcode.
@@ -802,16 +799,16 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             result, halfCarry := IncrementByteBy1(cpu.Registers.H)
             cpu.Registers.H = result // Update H.
             if result == 0 {
-                cpu.Registers.F |= 1 << 7 // Set Z flag.
+                cpu.SetZflag()
             }else {
-                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+                cpu.ClearZflag()
             }
 
             // Clear N flag.
-            cpu.Registers.F &^= 1 << 6
+            cpu.ClearNflag()
 
             if halfCarry {
-                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+                cpu.SetHflag()
             }
 
             // Length: 1 bytes, opcode.
@@ -821,15 +818,15 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             result, halfCarry := DecrementByteBy1(cpu.Registers.H)
             cpu.Registers.H = result // Update H.
             if result == 0 {
-                cpu.Registers.F |= 1 << 7 // Set Z flag.
+                cpu.SetZflag()
             }else {
-                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+                cpu.ClearZflag()
             }
 
-            cpu.Registers.F |= 1 << 6 // Set N flag.
+            cpu.SetNflag()
 
             if halfCarry {
-                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+                cpu.SetHflag()
             }
 
             // Length: 1 bytes, opcode.
@@ -872,16 +869,16 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             result, halfCarry := IncrementByteBy1(cpu.Registers.A)
             cpu.Registers.A = result // Update H.
             if result == 0 {
-                cpu.Registers.F |= 1 << 7 // Set Z flag.
+                cpu.SetZflag()
             }else {
-                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+                cpu.ClearZflag()
             }
 
             // Clear N flag.
-            cpu.Registers.F &^= 1 << 6
+            cpu.ClearNflag()
 
             if halfCarry {
-                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+                cpu.SetHflag()
             }
 
             // Length: 1 bytes, opcode.
@@ -891,15 +888,15 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             result, halfCarry := DecrementByteBy1(cpu.Registers.A)
             cpu.Registers.A = result // Update A.
             if result == 0 {
-                cpu.Registers.F |= 1 << 7 // Set Z flag.
+                cpu.SetZflag()
             }else {
-                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+                cpu.ClearZflag()
             }
 
-            cpu.Registers.F |= 1 << 6 // Set N flag.
+            cpu.SetNflag()
 
             if halfCarry {
-                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+                cpu.SetHflag()
             }
 
             // Length: 1 bytes, opcode.
@@ -909,16 +906,16 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             result, halfCarry := IncrementByteBy1(cpu.Registers.L)
             cpu.Registers.L = result // Update L.
             if result == 0 {
-                cpu.Registers.F |= 1 << 7 // Set Z flag.
+                cpu.SetZflag()
             }else {
-                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+                cpu.ClearZflag()
             }
 
             // Clear N flag.
-            cpu.Registers.F &^= 1 << 6
+            cpu.ClearZflag()
 
             if halfCarry {
-                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+                cpu.SetHflag()
             }
 
             // Length: 1 bytes, opcode.
@@ -928,15 +925,15 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             result, halfCarry := DecrementByteBy1(cpu.Registers.L)
             cpu.Registers.L = result // Update L.
             if result == 0 {
-                cpu.Registers.F |= 1 << 7 // Set Z flag.
+                cpu.SetZflag()
             }else {
-                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+                cpu.ClearZflag()
             }
 
-            cpu.Registers.F |= 1 << 6 // Set N flag.
+            cpu.SetNflag()
 
             if halfCarry {
-                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+                cpu.SetHflag()
             }
 
             // Length: 1 bytes, opcode.
@@ -945,8 +942,8 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Flips all the bits in the 8-bit A register, and sets the N and H flags.
             cpu.Registers.A = ^cpu.Registers.A
-            cpu.Registers.F |= 1 << 6 // Set N Flag.
-            cpu.Registers.F |= 1 << 5 // Set H Flag.
+            cpu.SetNflag()
+            cpu.SetHflag()
 
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
@@ -956,38 +953,45 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             result, halfCarry := IncrementByteBy1(data)
             cpu.WriteByteToMemory(&cycles, cpu.HL(), result)
             if result == 0 {
-                cpu.Registers.F |= (1 << 7) // Set Z flag if result is 0.
+                cpu.SetZflag()
             }else {
-                cpu.Registers.F &^= (1 << 7) // Clear Z flag if result is 0.
+                cpu.ClearZflag()
             }
-            cpu.Registers.F &^= (1 << 6) // Clear N flag.
+            cpu.ClearNflag()
 
             if halfCarry {
-                cpu.Registers.F |= (1 << 5) // Set H flag if Half Carry.
+                cpu.SetHflag()
             }
 
             // Length: 1 bytes, opcode.
-            // Cycles: 3 cycles, opcode.
+            // Cycles: 3 cycles, opcode + R + W
         case instructions.DEC_indHL: // Decrements data at the absolute address specified by the 16-bit register HL.
 
             data := cpu.ReadByteFromMemory(&cycles, cpu.HL())
             result, halfCarry := DecrementByteBy1(data)
             cpu.WriteByteToMemory(&cycles, cpu.HL(), result)
             if result == 0 {
-                cpu.Registers.F |= (1 << 7) // Set Z flag if result is 0.
+                cpu.SetZflag()
             }else {
-                cpu.Registers.F &^= (1 << 7) // Clear Z flag if result is 0.
+                cpu.ClearZflag()
             }
-            cpu.Registers.F |= (1 << 6) // Set N flag.
+            cpu.SetNflag()
 
             if halfCarry {
-                cpu.Registers.F |= (1 << 5) // Set H flag if Half Carry.
+                cpu.SetHflag()
             }
 
             // Length: 1 bytes, opcode.
-            // Cycles: 3 cycles, opcode.
+            // Cycles: 3 cycles, opcode + R + W
+        case instructions.SCF:
+
+            // Sets the carry flag, and clears the N and H flags.
+            cpu.SetCflag()
+            cpu.ClearNflag()
+            cpu.ClearHflag()
+
             // Length: 1 bytes, opcode.
-            // Cycles: 3 cycles, opcode.
+            // Cycles: 1 cycles, opcode.
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)

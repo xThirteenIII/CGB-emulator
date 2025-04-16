@@ -654,3 +654,34 @@ func TestDEC_indHLSetsZAndNFlags(t *testing.T) {
         t.Error("H flag should not be set.")
     }
 }
+
+func TestSCF(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.SetNflag()
+    cpu.SetHflag()
+    cpu.ClearCflag()
+    cpu.Memory.RAM[0x0100] = instructions.SCF
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) == 0 {
+        t.Error("H flag should be set.")
+    }
+}
