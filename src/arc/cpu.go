@@ -986,9 +986,27 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
         case instructions.SCF:
 
             // Sets the carry flag, and clears the N and H flags.
-            cpu.SetCflag()
             cpu.ClearNflag()
             cpu.ClearHflag()
+            cpu.SetCflag()
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.CCF:
+
+            // Flips the carry flag, and clears the N and H flags.
+            cpu.ClearNflag()
+            cpu.ClearHflag()
+
+            // If C flag is not set, set it.
+            if (cpu.Registers.F & (1 << 4) == 0) {
+                cpu.SetCflag()
+            }else {
+                cpu.ClearCflag()
+            }
+
+            // Can also use XOR
+            // cpu.Registers.F ^= (1 << 4) // Flip the C flag (bit 4)
 
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
