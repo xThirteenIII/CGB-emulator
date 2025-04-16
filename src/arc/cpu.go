@@ -950,6 +950,44 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
+        case instructions.INC_indHL: // Increments data at the absolute address specified by the 16-bit register HL.
+
+            data := cpu.ReadByteFromMemory(&cycles, cpu.HL())
+            result, halfCarry := IncrementByteBy1(data)
+            cpu.WriteByteToMemory(&cycles, cpu.HL(), result)
+            if result == 0 {
+                cpu.Registers.F |= (1 << 7) // Set Z flag if result is 0.
+            }else {
+                cpu.Registers.F &^= (1 << 7) // Clear Z flag if result is 0.
+            }
+            cpu.Registers.F &^= (1 << 6) // Clear N flag.
+
+            if halfCarry {
+                cpu.Registers.F |= (1 << 5) // Set H flag if Half Carry.
+            }
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 3 cycles, opcode.
+        case instructions.DEC_indHL: // Decrements data at the absolute address specified by the 16-bit register HL.
+
+            data := cpu.ReadByteFromMemory(&cycles, cpu.HL())
+            result, halfCarry := DecrementByteBy1(data)
+            cpu.WriteByteToMemory(&cycles, cpu.HL(), result)
+            if result == 0 {
+                cpu.Registers.F |= (1 << 7) // Set Z flag if result is 0.
+            }else {
+                cpu.Registers.F &^= (1 << 7) // Clear Z flag if result is 0.
+            }
+            cpu.Registers.F |= (1 << 6) // Set N flag.
+
+            if halfCarry {
+                cpu.Registers.F |= (1 << 5) // Set H flag if Half Carry.
+            }
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 3 cycles, opcode.
+            // Length: 1 bytes, opcode.
+            // Cycles: 3 cycles, opcode.
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)

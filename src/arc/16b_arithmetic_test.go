@@ -542,3 +542,115 @@ func TestCPL(t *testing.T) {
         t.Error("H register should be set.")
     }
 }
+
+func TestINC_indHL(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.H = 0x30
+    cpu.Registers.L = 0x59
+    cpu.Memory.RAM[0x0100] = instructions.INC_indHL
+    cpu.Memory.RAM[0x3059] = 0x69
+
+    expectedCycles := 3
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Memory.RAM[0x3059] != 0x6A {
+        t.Error("Data at 0x3059 should be 0x6A. Instead got: ", cpu.Memory.RAM[0x3059])
+    }
+}
+
+func TestINC_indHLSetsHAndZFlags(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.H = 0x30
+    cpu.Registers.L = 0x59
+    cpu.Memory.RAM[0x0100] = instructions.INC_indHL
+    cpu.Memory.RAM[0x3059] = 0xFF
+
+    expectedCycles := 3
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Memory.RAM[0x3059] != 0x00 {
+        t.Error("Data at 0x3059 should be 0x00. Instead got: ", cpu.Memory.RAM[0x3059])
+    }
+
+    if (cpu.Registers.F & (1 << 7)) == 0 {
+        t.Error("Z flag should be set")
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) == 0 {
+        t.Error("H flag should be set.")
+    }
+}
+
+func TestDEC_indHL(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.H = 0x30
+    cpu.Registers.L = 0x59
+    cpu.Memory.RAM[0x0100] = instructions.DEC_indHL
+    cpu.Memory.RAM[0x3059] = 0x69
+
+    expectedCycles := 3
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Memory.RAM[0x3059] != 0x68 {
+        t.Error("Data at 0x3059 should be 0x68. Instead got: ", cpu.Memory.RAM[0x3059])
+    }
+}
+
+func TestDEC_indHLSetsZAndNFlags(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.H = 0x30
+    cpu.Registers.L = 0x59
+    cpu.Memory.RAM[0x0100] = instructions.DEC_indHL
+    cpu.Memory.RAM[0x3059] = 0x01
+
+    expectedCycles := 3
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 7)) == 0 {
+        t.Error("Z flag should be set")
+    }
+
+    if (cpu.Registers.F & (1 << 6)) == 0 {
+        t.Error("N flag should be set.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should not be set.")
+    }
+}
