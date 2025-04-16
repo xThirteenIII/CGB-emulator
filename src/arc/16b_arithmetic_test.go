@@ -876,3 +876,56 @@ func TestADDA_L(t *testing.T) {
         t.Error("A register should be 0x70. Instead got: ", cpu.Registers.A)
     }
 }
+
+func TestADDA_A(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Memory.RAM[0x0100] = instructions.ADDA_A
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x6A {
+        t.Error("A register should be 0x70. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestADDA_HL(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.H = 0x90
+    cpu.Registers.L = 0x08
+    cpu.Memory.RAM[0x0100] = instructions.ADDA_indHL
+    cpu.Memory.RAM[0x9008] = 0x35
+
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x6A {
+        t.Error("A register should be 0x70. Instead got: ", cpu.Registers.A)
+    }
+}
