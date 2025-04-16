@@ -99,7 +99,7 @@ func (r *RegisterFile) InitRegisters() {
 // four bits are always zero, even if a “pop af” instruction tries to write other values.
 /*
     Z uint  // Bit 7: Zero Flag.
-    N uint  // Bit 6: Add/Sub Flag (BCD).
+    N uint  // Bit 6: Add/Sub Flag (BCD). If 0, prev op was an ADD, else a SUB.
     H uint  // Bit 5: Half Carry Flag (BCD).
     C uint  // Bit 4: Carry Flag.
     U3 uint // Unused (always zero).
@@ -500,6 +500,7 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             absoluteAddress := 0xFF00 | uint16(n)
             cpu.Registers.A = cpu.ReadByteFromMemory(&cycles, absoluteAddress)
+        
             
             // Length: 2 bytes, opcode + n
             // Cycles: 3 machine cycles. opcode, R, R.
@@ -722,7 +723,7 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
-        case instructions.INC_D: // Increments data in the C register.
+        case instructions.INC_D: // Increments data in the D register.
 
             result, halfCarry := IncrementByteBy1(cpu.Registers.D)
             cpu.Registers.D = result // Update D.
@@ -759,7 +760,7 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
-        case instructions.INC_E: // Increments data in the C register.
+        case instructions.INC_E: // Increments data in the E register.
 
             result, halfCarry := IncrementByteBy1(cpu.Registers.E)
             cpu.Registers.E = result // Update E.
@@ -796,7 +797,7 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
-        case instructions.INC_H: // Increments data in the C register.
+        case instructions.INC_H: // Increments data in the H register.
 
             result, halfCarry := IncrementByteBy1(cpu.Registers.H)
             cpu.Registers.H = result // Update H.
@@ -819,6 +820,75 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             result, halfCarry := DecrementByteBy1(cpu.Registers.H)
             cpu.Registers.H = result // Update H.
+            if result == 0 {
+                cpu.Registers.F |= 1 << 7 // Set Z flag.
+            }else {
+                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+            }
+
+            cpu.Registers.F |= 1 << 6 // Set N flag.
+
+            if halfCarry {
+                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+            }
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.DAA:
+
+            //  LD  A, 0x09
+            //  ADD A, 0x01  ; A = 0x0A
+            //  DAA          ; adjusts A to 0x10, because 0x0A is invalid in BCD
+
+            // If N flag is not set.
+            if (cpu.Registers.F & (1 << 6)) == 0 {
+
+                // If first nibble exceeds 09 or H flag is set
+                if (cpu.Registers.A & 0x0F) > 0x09 || (cpu.Registers.F & (1 << 5) != 0) {
+
+                    cpu.Registers.A += 0x06 
+                }
+
+                // If C flag is set or A exceeds 0x99, adjust A register to BCD.
+                if cpu.Registers.A > 0x99 || (cpu.Registers.F & (1 << 4) != 0) {
+                    cpu.Registers.A += 0x60
+                }
+            }else {
+                
+                // If H flag is set, adjust A register to BCD.
+                if (cpu.Registers.F & (1 << 5) != 0) {
+                    
+                    cpu.Registers.A -= 0x06
+                }
+                // If C flag is set, adjust A register to BCD.
+                if (cpu.Registers.F & (1 << 4) != 0) {
+                    
+                    cpu.Registers.A -= 0x60
+                }
+            }
+        case instructions.INC_A: // Increments data in the A register.
+
+            result, halfCarry := IncrementByteBy1(cpu.Registers.A)
+            cpu.Registers.A = result // Update H.
+            if result == 0 {
+                cpu.Registers.F |= 1 << 7 // Set Z flag.
+            }else {
+                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+            }
+
+            // Clear N flag.
+            cpu.Registers.F &^= 1 << 6
+
+            if halfCarry {
+                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+            }
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.DEC_A:
+
+            result, halfCarry := DecrementByteBy1(cpu.Registers.A)
+            cpu.Registers.A = result // Update A.
             if result == 0 {
                 cpu.Registers.F |= 1 << 7 // Set Z flag.
             }else {

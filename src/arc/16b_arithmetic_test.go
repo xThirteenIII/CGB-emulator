@@ -372,3 +372,118 @@ func TestDEC_HSetsZandHFlags(t *testing.T) {
         t.Error("Z, N and H should be set. Instead got: ", cpu.Registers.F)
     }
 }
+
+func TestINC_A(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x34
+    cpu.Memory.RAM[0x0100] = instructions.INC_A
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.A != 0x35 {
+        t.Error("A register should be 0x35, instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestINC_ASetsZandHFlags(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0xFF
+    cpu.Memory.RAM[0x0100] = instructions.INC_A
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.A != 0x00 {
+        t.Error("A register should be 0, instead got: ", cpu.Registers.A)
+    }
+
+    if cpu.Registers.F != 0b10100000 {
+        t.Error("Z and H should be set. Instead got: ", cpu.Registers.F)
+    }
+}
+
+func TestDEC_A(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x34
+    cpu.Memory.RAM[0x0100] = instructions.DEC_A
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.A != 0x33 {
+        t.Error("A register should be 0x33, instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestDEC_ASetsZandHFlags(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0xF0
+    cpu.Memory.RAM[0x0100] = instructions.DEC_A
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.A != 0xEF {
+        t.Error("A register should be 0xEF, instead got: ", cpu.Registers.A)
+    }
+
+    if cpu.Registers.F != 0b01100000 {
+        t.Error("Z, N and H should be set. Instead got: ", cpu.Registers.F)
+    }
+}
+
+func TestDAAAdjustsAferINC_A(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Memory.RAM[0x0100] = instructions.LDA_d8
+    cpu.Memory.RAM[0x0101] = 0x09
+    cpu.Memory.RAM[0x0102] = instructions.INC_A
+    cpu.Memory.RAM[0x0103] = instructions.DAA
+
+    expectedCycles := 2 + 1 + 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.A != 0x10 {
+        t.Error("A register should be 0x10. Instead got: ", cpu.Registers.A)
+    }
+}
