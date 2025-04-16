@@ -511,3 +511,34 @@ func TestDAAAdjustsAferDEC_A(t *testing.T) {
         t.Error("A register should be 0x19. Instead got: ", cpu.Registers.A)
     }
 }
+
+func TestCPL(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x3F
+    cpu.Memory.RAM[0x0100] = instructions.CPL
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    // A = 0x3F = 0x00111111
+    // ~A = 0x11000000
+    if cpu.Registers.A != 0xC0 {
+        t.Error("A register should be 0xC0. Instead got: ", cpu.Registers.A)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) == 0 {
+        t.Error("N register should be set.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) == 0 {
+        t.Error("H register should be set.")
+    }
+}

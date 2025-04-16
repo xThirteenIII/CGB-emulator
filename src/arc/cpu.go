@@ -904,6 +904,52 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
+        case instructions.INC_L: // Increments data in the L register.
+
+            result, halfCarry := IncrementByteBy1(cpu.Registers.L)
+            cpu.Registers.L = result // Update L.
+            if result == 0 {
+                cpu.Registers.F |= 1 << 7 // Set Z flag.
+            }else {
+                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+            }
+
+            // Clear N flag.
+            cpu.Registers.F &^= 1 << 6
+
+            if halfCarry {
+                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+            }
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.DEC_L:
+
+            result, halfCarry := DecrementByteBy1(cpu.Registers.L)
+            cpu.Registers.L = result // Update L.
+            if result == 0 {
+                cpu.Registers.F |= 1 << 7 // Set Z flag.
+            }else {
+                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+            }
+
+            cpu.Registers.F |= 1 << 6 // Set N flag.
+
+            if halfCarry {
+                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+            }
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.CPL:
+
+            // Flips all the bits in the 8-bit A register, and sets the N and H flags.
+            cpu.Registers.A = ^cpu.Registers.A
+            cpu.Registers.F |= 1 << 6 // Set N Flag.
+            cpu.Registers.F |= 1 << 5 // Set H Flag.
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)
