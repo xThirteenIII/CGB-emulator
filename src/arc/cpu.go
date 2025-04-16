@@ -860,6 +860,7 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
                     
                     cpu.Registers.A -= 0x06
                 }
+
                 // If C flag is set, adjust A register to BCD.
                 if (cpu.Registers.F & (1 << 4) != 0) {
                     

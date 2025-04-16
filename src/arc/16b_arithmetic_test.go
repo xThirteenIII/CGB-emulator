@@ -487,3 +487,27 @@ func TestDAAAdjustsAferINC_A(t *testing.T) {
         t.Error("A register should be 0x10. Instead got: ", cpu.Registers.A)
     }
 }
+
+func TestDAAAdjustsAferDEC_A(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Memory.RAM[0x0100] = instructions.LDA_d8
+    cpu.Memory.RAM[0x0101] = 0x20
+    cpu.Memory.RAM[0x0102] = instructions.DEC_A
+    cpu.Memory.RAM[0x0103] = instructions.DAA
+
+    expectedCycles := 2 + 1 + 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    // A = 0x1F = 0x19
+    if cpu.Registers.A != 0x19 {
+        t.Error("A register should be 0x19. Instead got: ", cpu.Registers.A)
+    }
+}
