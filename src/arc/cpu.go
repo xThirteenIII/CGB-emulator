@@ -707,7 +707,81 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
         case instructions.DEC_C:
 
             result, halfCarry := DecrementByteBy1(cpu.Registers.C)
-            cpu.Registers.C = result // Update B.
+            cpu.Registers.C = result // Update C.
+            if result == 0 {
+                cpu.Registers.F |= 1 << 7 // Set Z flag.
+            }else {
+                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+            }
+
+            cpu.Registers.F |= 1 << 6 // Set N flag.
+
+            if halfCarry {
+                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+            }
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.INC_D: // Increments data in the C register.
+
+            result, halfCarry := IncrementByteBy1(cpu.Registers.D)
+            cpu.Registers.D = result // Update D.
+            if result == 0 {
+                cpu.Registers.F |= 1 << 7 // Set Z flag.
+            }else {
+                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+            }
+
+            // Clear N flag.
+            cpu.Registers.F &^= 1 << 6
+
+            if halfCarry {
+                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+            }
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.DEC_D:
+
+            result, halfCarry := DecrementByteBy1(cpu.Registers.D)
+            cpu.Registers.D = result // Update D.
+            if result == 0 {
+                cpu.Registers.F |= 1 << 7 // Set Z flag.
+            }else {
+                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+            }
+
+            cpu.Registers.F |= 1 << 6 // Set N flag.
+
+            if halfCarry {
+                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+            }
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.INC_E: // Increments data in the C register.
+
+            result, halfCarry := IncrementByteBy1(cpu.Registers.E)
+            cpu.Registers.E = result // Update E.
+            if result == 0 {
+                cpu.Registers.F |= 1 << 7 // Set Z flag.
+            }else {
+                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+            }
+
+            // Clear N flag.
+            cpu.Registers.F &^= 1 << 6
+
+            if halfCarry {
+                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+            }
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.DEC_E:
+
+            result, halfCarry := DecrementByteBy1(cpu.Registers.E)
+            cpu.Registers.E = result // Update E.
             if result == 0 {
                 cpu.Registers.F |= 1 << 7 // Set Z flag.
             }else {

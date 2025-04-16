@@ -188,3 +188,96 @@ func TestDEC_CSetsZandHFlags(t *testing.T) {
         t.Error("Z, N and H should be set. Instead got: ", cpu.Registers.F)
     }
 }
+
+func TestDEC_E(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.E = 0x34
+    cpu.Memory.RAM[0x0100] = instructions.DEC_E
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.E != 0x33 {
+        t.Error("E register should be 0x33, instead got: ", cpu.Registers.E)
+    }
+}
+
+func TestDEC_ESetsZandHFlags(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.E = 0xF0
+    cpu.Memory.RAM[0x0100] = instructions.DEC_E
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.E != 0xEF {
+        t.Error("E register should be 0xEF, instead got: ", cpu.Registers.E)
+    }
+
+    if cpu.Registers.F != 0b01100000 {
+        t.Error("Z, N and H should be set. Instead got: ", cpu.Registers.F)
+    }
+}
+
+func TestINC_E(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.E = 0x34
+    cpu.Memory.RAM[0x0100] = instructions.INC_E
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.E != 0x35 {
+        t.Error("E register should be 0x35, instead got: ", cpu.Registers.E)
+    }
+}
+
+func TestINC_ESetsZandHFlags(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.E = 0xFF
+    cpu.Memory.RAM[0x0100] = instructions.INC_E
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.E != 0x00 {
+        t.Error("E register should be 0, instead got: ", cpu.Registers.E)
+    }
+
+    if cpu.Registers.F != 0b10100000 {
+        t.Error("Z and H should be set. Instead got: ", cpu.Registers.F)
+    }
+}
+
