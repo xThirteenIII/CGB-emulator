@@ -796,6 +796,43 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
+        case instructions.INC_H: // Increments data in the C register.
+
+            result, halfCarry := IncrementByteBy1(cpu.Registers.H)
+            cpu.Registers.H = result // Update H.
+            if result == 0 {
+                cpu.Registers.F |= 1 << 7 // Set Z flag.
+            }else {
+                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+            }
+
+            // Clear N flag.
+            cpu.Registers.F &^= 1 << 6
+
+            if halfCarry {
+                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+            }
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.DEC_H:
+
+            result, halfCarry := DecrementByteBy1(cpu.Registers.H)
+            cpu.Registers.H = result // Update H.
+            if result == 0 {
+                cpu.Registers.F |= 1 << 7 // Set Z flag.
+            }else {
+                cpu.Registers.F &^= 1 << 7 // Else clear Z flag.
+            }
+
+            cpu.Registers.F |= 1 << 6 // Set N flag.
+
+            if halfCarry {
+                cpu.Registers.F |= 1 << 5 // Set HalfCarry.
+            }
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)

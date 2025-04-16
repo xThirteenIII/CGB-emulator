@@ -281,3 +281,94 @@ func TestINC_ESetsZandHFlags(t *testing.T) {
     }
 }
 
+func TestINC_H(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.H = 0x34
+    cpu.Memory.RAM[0x0100] = instructions.INC_H
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.H != 0x35 {
+        t.Error("H register should be 0x35, instead got: ", cpu.Registers.H)
+    }
+}
+
+func TestINC_HSetsZandHFlags(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.H = 0xFF
+    cpu.Memory.RAM[0x0100] = instructions.INC_H
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.H != 0x00 {
+        t.Error("H register should be 0, instead got: ", cpu.Registers.H)
+    }
+
+    if cpu.Registers.F != 0b10100000 {
+        t.Error("Z and H should be set. Instead got: ", cpu.Registers.F)
+    }
+}
+
+func TestDEC_H(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.H = 0x34
+    cpu.Memory.RAM[0x0100] = instructions.DEC_H
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.H != 0x33 {
+        t.Error("H register should be 0x33, instead got: ", cpu.Registers.H)
+    }
+}
+
+func TestDEC_HSetsZandHFlags(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.H = 0xF0
+    cpu.Memory.RAM[0x0100] = instructions.DEC_H
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.H != 0xEF {
+        t.Error("H register should be 0xEF, instead got: ", cpu.Registers.H)
+    }
+
+    if cpu.Registers.F != 0b01100000 {
+        t.Error("Z, N and H should be set. Instead got: ", cpu.Registers.F)
+    }
+}
