@@ -716,3 +716,29 @@ func TestCCF(t *testing.T) {
         t.Error("C flag should be set.")
     }
 }
+
+func TestADDA_B(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.B = 0x35
+    cpu.Memory.RAM[0x0100] = instructions.ADDA_B
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x6A {
+        t.Error("A register should be 0x70. Instead got: ", cpu.Registers.A)
+    }
+}

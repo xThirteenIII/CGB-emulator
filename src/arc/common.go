@@ -64,6 +64,29 @@ func AddInt8ToUint16WithCarry(value uint16, adder int8) (uint16, byte) {
     return uint16(int32(value) + int32(adder)), carryPerBit
 }
 
+// AddByteToByteWithCarry adds b1 to b.
+// It returns the result of the operation and a byte with Carry and HalfCarry bits set according 
+// to operation result.
+func AddByteToByteWithCarry(b , b1 byte) (byte, byte) {
+
+    carryPerBit := byte(0)
+
+    // Isolate four lower bits of the 16bit address and the signed 8bit.
+    if ((b&0x0F) + (b1 & 0x0F)) > 0x0F {
+
+        // Set halfCarryBit, which is bit 5
+        carryPerBit |= 1 << 5
+    }
+
+    if b + b1 > 0xFF {
+
+        // Set CarryBit, which is bit 4
+        carryPerBit |= 1 << 4 // that is: | 0b00010000
+    }
+
+    return b + b1, carryPerBit
+}
+
 // IncrementByteBy1 adds 1 to the byte.
 // It returns the result of the operation and a bool set to true if half carry happens.
 func IncrementByteBy1(value byte) (byte, bool) {
