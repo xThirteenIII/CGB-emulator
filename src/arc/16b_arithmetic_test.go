@@ -725,7 +725,7 @@ func TestADDA_B(t *testing.T) {
     // When
     cpu.Registers.A = 0x35
     cpu.Registers.B = 0x35
-    cpu.Memory.RAM[0x0100] = instructions.ADDA_B
+    cpu.Memory.RAM[0x0100] = instructions.ADD_B
 
     expectedCycles := 1
     cyclesUsed := cpu.Execute(expectedCycles)
@@ -751,7 +751,7 @@ func TestADDA_C(t *testing.T) {
     // When
     cpu.Registers.A = 0x35
     cpu.Registers.C = 0xCB
-    cpu.Memory.RAM[0x0100] = instructions.ADDA_C
+    cpu.Memory.RAM[0x0100] = instructions.ADD_C
 
     expectedCycles := 1
     cyclesUsed := cpu.Execute(expectedCycles)
@@ -781,7 +781,7 @@ func TestADDA_D(t *testing.T) {
     // When
     cpu.Registers.A = 0x35
     cpu.Registers.D = 0x35
-    cpu.Memory.RAM[0x0100] = instructions.ADDA_D
+    cpu.Memory.RAM[0x0100] = instructions.ADD_D
 
     expectedCycles := 1
     cyclesUsed := cpu.Execute(expectedCycles)
@@ -807,7 +807,7 @@ func TestADDA_E(t *testing.T) {
     // When
     cpu.Registers.A = 0x35
     cpu.Registers.E = 0x35
-    cpu.Memory.RAM[0x0100] = instructions.ADDA_E
+    cpu.Memory.RAM[0x0100] = instructions.ADD_E
 
     expectedCycles := 1
     cyclesUsed := cpu.Execute(expectedCycles)
@@ -833,7 +833,7 @@ func TestADDA_H(t *testing.T) {
     // When
     cpu.Registers.A = 0x35
     cpu.Registers.H = 0x35
-    cpu.Memory.RAM[0x0100] = instructions.ADDA_H
+    cpu.Memory.RAM[0x0100] = instructions.ADD_H
 
     expectedCycles := 1
     cyclesUsed := cpu.Execute(expectedCycles)
@@ -859,7 +859,7 @@ func TestADDA_L(t *testing.T) {
     // When
     cpu.Registers.A = 0x35
     cpu.Registers.L = 0x35
-    cpu.Memory.RAM[0x0100] = instructions.ADDA_L
+    cpu.Memory.RAM[0x0100] = instructions.ADD_L
 
     expectedCycles := 1
     cyclesUsed := cpu.Execute(expectedCycles)
@@ -884,7 +884,7 @@ func TestADDA_A(t *testing.T) {
 
     // When
     cpu.Registers.A = 0x35
-    cpu.Memory.RAM[0x0100] = instructions.ADDA_A
+    cpu.Memory.RAM[0x0100] = instructions.ADD_A
 
     expectedCycles := 1
     cyclesUsed := cpu.Execute(expectedCycles)
@@ -911,7 +911,7 @@ func TestADDA_HL(t *testing.T) {
     cpu.Registers.A = 0x35
     cpu.Registers.H = 0x90
     cpu.Registers.L = 0x08
-    cpu.Memory.RAM[0x0100] = instructions.ADDA_indHL
+    cpu.Memory.RAM[0x0100] = instructions.ADD_indHL
     cpu.Memory.RAM[0x9008] = 0x35
 
     expectedCycles := 2
@@ -927,5 +927,45 @@ func TestADDA_HL(t *testing.T) {
 
     if cpu.Registers.A != 0x6A {
         t.Error("A register should be 0x70. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestADC_B(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.B = 0xCA
+    cpu.Memory.RAM[0x0100] = instructions.CCF
+    // flag C is set
+    cpu.Memory.RAM[0x0101] = instructions.ADC_B
+
+    expectedCycles := 1 + 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 7)) == 0 {
+        t.Error("Z flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) == 0 {
+        t.Error("H flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) == 0 {
+        t.Error("C flag should be 1.")
+    }
+
+    if cpu.Registers.A != 0x00 {
+        t.Error("A register should be 0. Instead got: ", cpu.Registers.A)
     }
 }

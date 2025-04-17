@@ -41,10 +41,10 @@ func Decrement16Address(lsb , msb *byte) {
     *lsb = byte(absoluteAddress & 0xFF)
 }
 
-// AddInt8ToUint16 adds the signed 8-bit byte to the unsigned uint16. 
+// AddInt8ToUint16WithoutCarry adds the signed 8-bit byte to the unsigned uint16. 
 // It returns the result of the operation and a byte with Carry and HalfCarry set according 
 // to operation result.
-func AddInt8ToUint16WithCarry(value uint16, adder int8) (uint16, byte) {
+func AddInt8ToUint16WithoutCarry(value uint16, adder int8) (uint16, byte) {
 
     carryPerBit := byte(0)
 
@@ -64,10 +64,39 @@ func AddInt8ToUint16WithCarry(value uint16, adder int8) (uint16, byte) {
     return uint16(int32(value) + int32(adder)), carryPerBit
 }
 
-// AddByteToByteWithCarry adds b1 to b.
+// AddByteToByteWithoutCarry adds b1 to b.
 // It returns the result of the operation and a byte with Carry and HalfCarry bits set according 
 // to operation result.
-func AddByteToByteWithCarry(b , b1 byte) (byte, byte) {
+func AddByteToByteWithCarry(b , b1, flags byte) (byte, byte) {
+
+    carryPerBit := byte(0)
+    var carryFlag byte
+    if (flags & (1 << 4)) == 0 {
+        carryFlag = 0x00
+    }else {
+        carryFlag = 0x01
+    }
+
+    // Isolate four lower bits of the 16bit address and the signed 8bit.
+    if ((b&0x0F) + (b1 & 0x0F) + carryFlag) > 0x0F {
+
+        // Set halfCarryBit, which is bit 5
+        carryPerBit |= 1 << 5
+    }
+
+    if uint16(b) + uint16(b1) + uint16(carryFlag)> 0xFF {
+
+        // Set CarryBit, which is bit 4
+        carryPerBit |= 1 << 4 // that is: | 0b00010000
+    }
+
+    return b + b1 + carryFlag, carryPerBit
+}
+
+// AddByteToByteWithoutCarry adds b1 to b.
+// It returns the result of the operation and a byte with Carry and HalfCarry bits set according 
+// to operation result.
+func AddByteToByteWithoutCarry(b , b1 byte) (byte, byte) {
 
     carryPerBit := byte(0)
 
@@ -78,7 +107,7 @@ func AddByteToByteWithCarry(b , b1 byte) (byte, byte) {
         carryPerBit |= 1 << 5
     }
 
-    if b + b1 > 0xFF {
+    if uint16(b) + uint16(b1) > 0xFF {
 
         // Set CarryBit, which is bit 4
         carryPerBit |= 1 << 4 // that is: | 0b00010000
@@ -141,3 +170,4 @@ func (cpu *CPU) ClearCflag() {
     
     cpu.Registers.F &^= 1 << 4
 }
+

@@ -629,7 +629,7 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             // flags will be either 0b0001000 or 0b10000000
             // This way Z and N are set to 0, H and C set accordingly to operation.
             // Last 4 bits are always 0.
-            result, flags := AddInt8ToUint16WithCarry(cpu.Registers.SP, s8)
+            result, flags := AddInt8ToUint16WithoutCarry(cpu.Registers.SP, s8)
 
             cpu.Registers.F = 0x00
             cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
@@ -1010,14 +1010,13 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
-        case instructions.ADDA_B:
+        case instructions.ADD_B:
 
             // Adds to the 8-bit A register, the 8-bit register B, and stores the result back into the A register.
-            result, flags := AddByteToByteWithCarry(cpu.Registers.A, cpu.Registers.B)
+            result, flags := AddByteToByteWithoutCarry(cpu.Registers.A, cpu.Registers.B)
 
             cpu.Registers.F = 0x00
-            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
-            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present. cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
 
             if result == 0 {
                 cpu.SetZflag()
@@ -1032,10 +1031,10 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
-        case instructions.ADDA_C:
+        case instructions.ADD_C:
 
             // Adds to the 8-bit A register, the 8-bit register C, and stores the result back into the A register.
-            result, flags := AddByteToByteWithCarry(cpu.Registers.A, cpu.Registers.C)
+            result, flags := AddByteToByteWithoutCarry(cpu.Registers.A, cpu.Registers.C)
 
             cpu.Registers.F = 0x00
             cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
@@ -1054,10 +1053,10 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
-        case instructions.ADDA_D:
+        case instructions.ADD_D:
 
             // Adds to the 8-bit A register, the 8-bit register D, and stores the result back into the A register.
-            result, flags := AddByteToByteWithCarry(cpu.Registers.A, cpu.Registers.D)
+            result, flags := AddByteToByteWithoutCarry(cpu.Registers.A, cpu.Registers.D)
 
             cpu.Registers.F = 0x00
             cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
@@ -1076,10 +1075,10 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
-        case instructions.ADDA_E:
+        case instructions.ADD_E:
 
             // Adds to the 8-bit A register, the 8-bit register E, and stores the result back into the A register.
-            result, flags := AddByteToByteWithCarry(cpu.Registers.A, cpu.Registers.E)
+            result, flags := AddByteToByteWithoutCarry(cpu.Registers.A, cpu.Registers.E)
 
             cpu.Registers.F = 0x00
             cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
@@ -1098,10 +1097,10 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
-        case instructions.ADDA_H:
+        case instructions.ADD_H:
 
             // Adds to the 8-bit A register, the 8-bit register H, and stores the result back into the A register.
-            result, flags := AddByteToByteWithCarry(cpu.Registers.A, cpu.Registers.H)
+            result, flags := AddByteToByteWithoutCarry(cpu.Registers.A, cpu.Registers.H)
 
             cpu.Registers.F = 0x00
             cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
@@ -1120,10 +1119,10 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
-        case instructions.ADDA_L:
+        case instructions.ADD_L:
 
             // Adds to the 8-bit A register, the 8-bit register L, and stores the result back into the A register.
-            result, flags := AddByteToByteWithCarry(cpu.Registers.A, cpu.Registers.L)
+            result, flags := AddByteToByteWithoutCarry(cpu.Registers.A, cpu.Registers.L)
 
             cpu.Registers.F = 0x00
             cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
@@ -1142,12 +1141,12 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
-        case instructions.ADDA_indHL:
+        case instructions.ADD_indHL:
 
             // Adds to the 8-bit A register, the 8-bit register L, and stores the result back into the A register.
 
             data := cpu.ReadByteFromMemory(&cycles, cpu.HL())
-            result, flags := AddByteToByteWithCarry(cpu.Registers.A, data)
+            result, flags := AddByteToByteWithoutCarry(cpu.Registers.A, data)
 
             cpu.Registers.F = 0x00
             cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
@@ -1166,10 +1165,10 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode.
             // Cycles: 2 cycles, opcode + R.
-        case instructions.ADDA_A:
+        case instructions.ADD_A:
 
             // Adds to the 8-bit A register, the 8-bit register L, and stores the result back into the A register.
-            result, flags := AddByteToByteWithCarry(cpu.Registers.A, cpu.Registers.A)
+            result, flags := AddByteToByteWithoutCarry(cpu.Registers.A, cpu.Registers.A)
 
             cpu.Registers.F = 0x00
             cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
@@ -1185,6 +1184,29 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             cpu.ClearNflag()
             
             cpu.Registers.A = result
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.ADC_B:
+
+            // Adds to the 8-bit A register, the carry flag and the 8-bit register r,
+            // and stores the result back into the A register.
+            result, flags := AddByteToByteWithCarry(cpu.Registers.A, cpu.Registers.B, cpu.Registers.F)
+            cpu.Registers.A = result
+
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+
+            cpu.ClearNflag()
+            
 
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
