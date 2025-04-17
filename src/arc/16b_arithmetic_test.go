@@ -969,3 +969,242 @@ func TestADC_B(t *testing.T) {
         t.Error("A register should be 0. Instead got: ", cpu.Registers.A)
     }
 }
+
+func TestADC_C(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.C = 0xCA
+    cpu.Memory.RAM[0x0100] = instructions.CCF
+    // flag C is set
+    cpu.Memory.RAM[0x0101] = instructions.ADC_C
+
+    expectedCycles := 1 + 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 7)) == 0 {
+        t.Error("Z flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) == 0 {
+        t.Error("H flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) == 0 {
+        t.Error("C flag should be 1.")
+    }
+
+    if cpu.Registers.A != 0x00 {
+        t.Error("A register should be 0. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestADC_D(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.D = 0xCA
+    cpu.Memory.RAM[0x0100] = instructions.CCF
+    // flag C is set
+    cpu.Memory.RAM[0x0101] = instructions.ADC_D
+
+    expectedCycles := 1 + 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 7)) == 0 {
+        t.Error("Z flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) == 0 {
+        t.Error("H flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) == 0 {
+        t.Error("C flag should be 1.")
+    }
+
+    if cpu.Registers.A != 0x00 {
+        t.Error("A register should be 0. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestADC_E(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.E = 0xCA
+    cpu.Memory.RAM[0x0100] = instructions.CCF
+    // flag C is set
+    cpu.Memory.RAM[0x0101] = instructions.ADC_E
+
+    expectedCycles := 1 + 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 7)) == 0 {
+        t.Error("Z flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) == 0 {
+        t.Error("H flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) == 0 {
+        t.Error("C flag should be 1.")
+    }
+
+    if cpu.Registers.A != 0x00 {
+        t.Error("A register should be 0. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestADC_H(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.H = 0xCA
+    cpu.Memory.RAM[0x0100] = instructions.CCF
+    // flag C is set
+    cpu.Memory.RAM[0x0101] = instructions.ADC_H
+
+    expectedCycles := 1 + 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 7)) == 0 {
+        t.Error("Z flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) == 0 {
+        t.Error("H flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) == 0 {
+        t.Error("C flag should be 1.")
+    }
+
+    if cpu.Registers.A != 0x00 {
+        t.Error("A register should be 0. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestADC_L(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.L = 0xCA
+    cpu.Memory.RAM[0x0100] = instructions.CCF
+    // flag C is set
+    cpu.Memory.RAM[0x0101] = instructions.ADC_L
+
+    expectedCycles := 1 + 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 7)) == 0 {
+        t.Error("Z flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) == 0 {
+        t.Error("H flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) == 0 {
+        t.Error("C flag should be 1.")
+    }
+
+    if cpu.Registers.A != 0x00 {
+        t.Error("A register should be 0. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestADC_A(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x80
+    cpu.Memory.RAM[0x0100] = instructions.CCF
+    // flag C is set
+    cpu.Memory.RAM[0x0101] = instructions.ADC_A
+
+    expectedCycles := 1 + 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 7)) != 0 {
+        t.Error("Z flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) == 0 {
+        t.Error("C flag should be 1.")
+    }
+
+    if cpu.Registers.A != 0x01 {
+        t.Error("A register should be 1. Instead got: ", cpu.Registers.A)
+    }
+}

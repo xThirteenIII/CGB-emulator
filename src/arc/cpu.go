@@ -1210,6 +1210,144 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
+        case instructions.ADC_C:
+
+            // Adds to the 8-bit A register, the carry flag and the 8-bit register r,
+            // and stores the result back into the A register.
+            result, flags := AddByteToByteWithCarry(cpu.Registers.A, cpu.Registers.C, cpu.Registers.F)
+            cpu.Registers.A = result
+
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+
+            cpu.ClearNflag()
+            
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.ADC_D:
+
+            // Adds to the 8-bit A register, the carry flag and the 8-bit register r,
+            // and stores the result back into the A register.
+            result, flags := AddByteToByteWithCarry(cpu.Registers.A, cpu.Registers.D, cpu.Registers.F)
+            cpu.Registers.A = result
+
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+
+            cpu.ClearNflag()
+            
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.ADC_E:
+
+            // Adds to the 8-bit A register, the carry flag and the 8-bit register r,
+            // and stores the result back into the A register.
+            result, flags := AddByteToByteWithCarry(cpu.Registers.A, cpu.Registers.E, cpu.Registers.F)
+            cpu.Registers.A = result
+
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+
+            cpu.ClearNflag()
+            
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.ADC_H:
+
+            // Adds to the 8-bit A register, the carry flag and the 8-bit register r,
+            // and stores the result back into the A register.
+            result, flags := AddByteToByteWithCarry(cpu.Registers.A, cpu.Registers.H, cpu.Registers.F)
+            cpu.Registers.A = result
+
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+
+            cpu.ClearNflag()
+            
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.ADC_L:
+
+            // Adds to the 8-bit A register, the carry flag and the 8-bit register r,
+            // and stores the result back into the A register.
+            result, flags := AddByteToByteWithCarry(cpu.Registers.A, cpu.Registers.L, cpu.Registers.F)
+            cpu.Registers.A = result
+
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+
+            cpu.ClearNflag()
+            
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.ADC_A:
+
+            // Adds to the 8-bit A register, the carry flag and the 8-bit register r,
+            // and stores the result back into the A register.
+            result, flags := AddByteToByteWithCarry(cpu.Registers.A, cpu.Registers.A, cpu.Registers.F)
+            cpu.Registers.A = result
+
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+
+            cpu.ClearNflag()
+            
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)
