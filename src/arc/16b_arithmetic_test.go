@@ -1237,3 +1237,83 @@ func TestADC_HL(t *testing.T) {
         t.Error("A register should be 0x6B. Instead got: ", cpu.Registers.A)
     }
 }
+
+func TestSUB_B(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.B = 0x35
+    cpu.Memory.RAM[0x0100] = instructions.SUB_B
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) == 0 {
+        t.Error("N flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 7)) == 0 {
+        t.Error("Z flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) != 0 {
+        t.Error("C flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x00 {
+        t.Error("A register should be 0. Instead got: ", cpu.Registers.A)
+    }
+}
+
+
+// TestSUB_BSetsHandCflags verifies that Half and Carry flag are set.
+// Do this once for SUB_B. Function that subtracts is common to all SUB operations.
+func TestSUB_BSetsHandCflags(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.B = 0x47
+    cpu.Memory.RAM[0x0100] = instructions.SUB_B
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) == 0 {
+        t.Error("N flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 7)) != 0 {
+        t.Error("Z flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) == 0 {
+        t.Error("H flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) == 0 {
+        t.Error("C flag should be 1.")
+    }
+
+    if cpu.Registers.A != 0xFE {
+        t.Error("A register should be 0xFE. Instead got: ", cpu.Registers.A)
+    }
+}
+

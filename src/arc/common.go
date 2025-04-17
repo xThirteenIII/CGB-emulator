@@ -116,6 +116,57 @@ func AddByteToByteWithoutCarry(b , b1 byte) (byte, byte) {
     return b + b1, carryPerBit
 }
 
+// SubByteFromByteWithCarry subtracts b1 from b.
+// It returns the result of the operation and a byte with Carry and HalfCarry bits set according 
+// to operation result.
+func SubByteFromByteWithCarry(b , b1, flags byte) (byte, byte) {
+
+    carryPerBit := byte(0)
+    var carryFlag byte
+    if (flags & (1 << 4)) == 0 {
+        carryFlag = 0x00
+    }else {
+        carryFlag = 0x01
+    }
+
+    if  (b&0x0F) < ((b1&0x0F) + carryFlag) {
+
+        // Set halfCarryBit, which is bit 5
+        carryPerBit |= 1 << 5
+    }
+
+    if  b < (b1 + carryFlag) {
+
+        // Set CarryBit, which is bit 4
+        carryPerBit |= 1 << 4 // that is: | 0b00010000
+    }
+
+    return b - b1 - carryFlag, carryPerBit
+}
+
+// SubByteFromByteWithoutCarry subtracts b1 from b.
+// It returns the result of the operation and a byte with Carry and HalfCarry bits set according 
+// to operation result.
+func SubByteFromByteWithoutCarry(b , b1 byte) (byte, byte) {
+
+    carryPerBit := byte(0)
+
+    // If lower nibble of b1 is higher than lower nibble of b, a borrow is happening.
+    if (b&0x0F) < (b1&0x0F) {
+
+        // Set halfCarryBit, which is bit 5
+        carryPerBit |= 1 << 5
+    }
+
+    if b < b1 {
+
+        // Set CarryBit, which is bit 4
+        carryPerBit |= 1 << 4 // that is: | 0b00010000
+    }
+
+    return b - b1, carryPerBit
+}
+
 // IncrementByteBy1 adds 1 to the byte.
 // It returns the result of the operation and a bool set to true if half carry happens.
 func IncrementByteBy1(value byte) (byte, bool) {

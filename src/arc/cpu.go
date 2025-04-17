@@ -1372,6 +1372,29 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode.
             // Cycles: 2 cycles, opcode + R.
+        case instructions.SUB_B:
+
+            // Subtracts from the 8-bit A register, the 8-bit register r,
+            // and stores the result back into the A register.
+            result, flags := SubByteFromByteWithoutCarry(cpu.Registers.A, cpu.Registers.B)
+
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+
+            cpu.SetNflag()
+            
+            cpu.Registers.A = result
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)
