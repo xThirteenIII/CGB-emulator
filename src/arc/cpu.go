@@ -1395,6 +1395,168 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
+        case instructions.SUB_C:
+
+            // Subtracts from the 8-bit A register, the 8-bit register r,
+            // and stores the result back into the A register.
+            result, flags := SubByteFromByteWithoutCarry(cpu.Registers.A, cpu.Registers.C)
+
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+
+            cpu.SetNflag()
+            
+            cpu.Registers.A = result
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.SUB_D:
+
+            // Subtracts from the 8-bit A register, the 8-bit register r,
+            // and stores the result back into the A register.
+            result, flags := SubByteFromByteWithoutCarry(cpu.Registers.A, cpu.Registers.D)
+
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+
+            cpu.SetNflag()
+            
+            cpu.Registers.A = result
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.SUB_E:
+
+            // Subtracts from the 8-bit A register, the 8-bit register r,
+            // and stores the result back into the A register.
+            result, flags := SubByteFromByteWithoutCarry(cpu.Registers.A, cpu.Registers.E)
+
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+
+            cpu.SetNflag()
+            
+            cpu.Registers.A = result
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.SUB_H:
+
+            // Subtracts from the 8-bit A register, the 8-bit register r,
+            // and stores the result back into the A register.
+            result, flags := SubByteFromByteWithoutCarry(cpu.Registers.A, cpu.Registers.H)
+
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+
+            cpu.SetNflag()
+            
+            cpu.Registers.A = result
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.SUB_L:
+
+            // Subtracts from the 8-bit A register, the 8-bit register r,
+            // and stores the result back into the A register.
+            result, flags := SubByteFromByteWithoutCarry(cpu.Registers.A, cpu.Registers.L)
+
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+
+            cpu.SetNflag()
+            
+            cpu.Registers.A = result
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.SUB_A:
+
+            // Subtracts from the 8-bit A register, the 8-bit register r,
+            // and stores the result back into the A register.
+            result, flags := SubByteFromByteWithoutCarry(cpu.Registers.A, cpu.Registers.A)
+
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+
+            cpu.SetNflag()
+            
+            cpu.Registers.A = result
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.SUB_indHL:
+
+            // Adds to the 8-bit A register, the 8-bit register L, and stores the result back into the A register.
+
+            data := cpu.ReadByteFromMemory(&cycles, cpu.HL())
+            result, flags := SubByteFromByteWithoutCarry(cpu.Registers.A, data)
+
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+
+            cpu.SetNflag()
+            
+            cpu.Registers.A = result
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 2 cycles, opcode + R.
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)

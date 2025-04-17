@@ -1312,8 +1312,267 @@ func TestSUB_BSetsHandCflags(t *testing.T) {
         t.Error("C flag should be 1.")
     }
 
-    if cpu.Registers.A != 0xFE {
-        t.Error("A register should be 0xFE. Instead got: ", cpu.Registers.A)
+    if cpu.Registers.A != 0xEE {
+        t.Error("A register should be 0xEE. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestSUB_C(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.C = 0x35
+    cpu.Memory.RAM[0x0100] = instructions.SUB_C
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) == 0 {
+        t.Error("N flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 7)) == 0 {
+        t.Error("Z flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) != 0 {
+        t.Error("C flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x00 {
+        t.Error("A register should be 0. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestSUB_D(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.D = 0x35
+    cpu.Memory.RAM[0x0100] = instructions.SUB_D
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) == 0 {
+        t.Error("N flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 7)) == 0 {
+        t.Error("Z flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) != 0 {
+        t.Error("C flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x00 {
+        t.Error("A register should be 0. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestSUB_E(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.E = 0x35
+    cpu.Memory.RAM[0x0100] = instructions.SUB_E
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) == 0 {
+        t.Error("N flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 7)) == 0 {
+        t.Error("Z flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) != 0 {
+        t.Error("C flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x00 {
+        t.Error("A register should be 0. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestSUB_H(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.H = 0x35
+    cpu.Memory.RAM[0x0100] = instructions.SUB_H
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) == 0 {
+        t.Error("N flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 7)) == 0 {
+        t.Error("Z flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) != 0 {
+        t.Error("C flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x00 {
+        t.Error("A register should be 0. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestSUB_L(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.L = 0x35
+    cpu.Memory.RAM[0x0100] = instructions.SUB_L
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) == 0 {
+        t.Error("N flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 7)) == 0 {
+        t.Error("Z flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) != 0 {
+        t.Error("C flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x00 {
+        t.Error("A register should be 0. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestSUB_A(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Memory.RAM[0x0100] = instructions.SUB_A
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) == 0 {
+        t.Error("N flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 7)) == 0 {
+        t.Error("Z flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) != 0 {
+        t.Error("C flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x00 {
+        t.Error("A register should be 0. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestSUB_indHL(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.H = 0x90
+    cpu.Registers.L = 0x08
+    cpu.Memory.RAM[0x0100] = instructions.SUB_indHL
+    cpu.Memory.RAM[0x9008] = 0x35
+
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) == 0 {
+        t.Error("N flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 7)) == 0 {
+        t.Error("Z flag should be 1.")
+    }
+
+    if cpu.Registers.A != 0x00 {
+        t.Error("A register should be 0. Instead got: ", cpu.Registers.A)
     }
 }
 
