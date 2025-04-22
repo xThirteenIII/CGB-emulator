@@ -4,6 +4,7 @@ import (
 	"cgbemu/src/instructions"
 	"fmt"
 	"log"
+
 )
 
 // Following these two docs for Instruction implementation:
@@ -2353,6 +2354,28 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             cpu.SetNflag()
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
+        case instructions.ADD_d8:
+            // Adds to the 8-bit A register, the immediate data d8
+            // and stores the result back into the A register.
+            data := cpu.FetchByte(&cycles)
+            result, flags := AddByteToByteWithoutCarry(cpu.Registers.A, data)
+
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+
+            cpu.ClearNflag()
+            
+            cpu.Registers.A = result
+            // Length: 2 bytes, opcode.
+            // Cycles: 2 cycles, opcode + R
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)

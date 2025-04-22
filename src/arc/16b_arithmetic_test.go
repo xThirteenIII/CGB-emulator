@@ -3187,3 +3187,30 @@ func TestCP_indHL(t *testing.T) {
         t.Error("Z flag should be 1.")
     }
 }
+
+func TestADD_d8(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Memory.RAM[0x0100] = instructions.ADD_d8
+    cpu.Memory.RAM[0x0101] = 0x35
+
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x6A {
+        t.Error("A register should be 0x70. Instead got: ", cpu.Registers.A)
+    }
+}
+
