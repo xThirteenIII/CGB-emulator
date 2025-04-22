@@ -2444,6 +2444,84 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             cpu.SetNflag()
             // Length: 2 bytes, opcode + d8.
             // Cycles: 2 cycles, opcode + R.
+        case instructions.AND_d8:
+
+            // Performs a bitwise AND operation between the 8-bit A register and immediate data n, and
+            // stores the result back into the A register.
+
+            data := cpu.FetchByte(&cycles)
+            result := cpu.Registers.A & data
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+            cpu.ClearNflag()
+            cpu.SetHflag()
+            cpu.ClearCflag()
+
+            cpu.Registers.A = result
+
+            // Length: 2 bytes, opcode + d8.
+            // Cycles: 2 cycles, opcode + R.
+        case instructions.XOR_d8:
+            // Performs a bitwise XOR operation between the 8-bit A register and the 8-bit register r, and
+            // stores the result back into the A register.
+
+            data := cpu.FetchByte(&cycles)
+            result := cpu.Registers.A ^ data
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+            cpu.ClearNflag()
+            cpu.ClearHflag()
+            cpu.ClearCflag()
+
+            cpu.Registers.A = result
+            // Length: 2 bytes, opcode + d8.
+            // Cycles: 2 cycles, opcode + R.
+        case instructions.OR_d8:
+            // Performs a bitwise OR operation between the 8-bit A register and the 8-bit register r, and
+            // stores the result back into the A register.
+
+            data := cpu.FetchByte(&cycles)
+            result := cpu.Registers.A | data
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+            cpu.ClearNflag()
+            cpu.ClearHflag()
+            cpu.ClearCflag()
+
+            cpu.Registers.A = result
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.CP_d8:
+            // Subtracts from the 8-bit A register, the 8-bit register r
+            // and updates flags based on the result.
+            // This instruction is basically identical to SUB r, but does not update the A register.
+            data := cpu.FetchByte(&cycles)
+            result, flags := SubByteFromByteWithoutCarry(cpu.Registers.A, data)
+
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+
+            cpu.SetNflag()
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)

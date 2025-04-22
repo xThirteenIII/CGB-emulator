@@ -3331,3 +3331,155 @@ func TestSBC_d8(t *testing.T) {
         t.Error("A register should be 0. Instead got: ", cpu.Registers.A)
     }
 }
+
+func TestAND_d8(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Memory.RAM[0x0100] = instructions.AND_d8
+    cpu.Memory.RAM[0x0101] = 0x13
+
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 7)) != 0 {
+        t.Error("Z flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) != 0 {
+        t.Error("C flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) == 0 {
+        t.Error("H flag should be 1.")
+    }
+
+    if cpu.Registers.A != 0x11 {
+        t.Error("A register should be 0x11. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestXOR_d8(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Memory.RAM[0x0100] = instructions.XOR_d8
+    cpu.Memory.RAM[0x0101] = 0x13
+
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 7)) != 0 {
+        t.Error("Z flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) != 0 {
+        t.Error("C flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x26 {
+        t.Error("A register should be 0x26. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestOR_d8(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Memory.RAM[0x0100] = instructions.OR_d8
+    cpu.Memory.RAM[0x0101] = 0x13
+
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 7)) != 0 {
+        t.Error("Z flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) != 0 {
+        t.Error("C flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x37 {
+        t.Error("A register should be 0x37. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestCP_d8(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Memory.RAM[0x0100] = instructions.CP_d8
+    cpu.Memory.RAM[0x0101] = 0x35
+
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) == 0 {
+        t.Error("N flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 7)) == 0 {
+        t.Error("Z flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) != 0 {
+        t.Error("C flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x35 {
+        t.Error("A register should be 0x35. Instead got: ", cpu.Registers.A)
+    }
+}
