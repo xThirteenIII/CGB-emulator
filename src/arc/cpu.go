@@ -1893,6 +1893,7 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             // Length: 1 bytes, opcode.
             // Cycles: 1 cycles, opcode.
         
+            cpu.Registers.A = result
         case instructions.XOR_B:
             // Performs a bitwise XOR operation between the 8-bit A register and the 8-bit register r, and
             // stores the result back into the A register.
@@ -2028,6 +2029,155 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             // stores the result back into the A register.
 
             result := cpu.Registers.A ^ cpu.Registers.A
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+            cpu.ClearNflag()
+            cpu.ClearHflag()
+            cpu.ClearCflag()
+
+            cpu.Registers.A = result
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        
+        case instructions.OR_B:
+            // Performs a bitwise OR operation between the 8-bit A register and the 8-bit register r, and
+            // stores the result back into the A register.
+
+            result := cpu.Registers.A | cpu.Registers.B
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+            cpu.ClearNflag()
+            cpu.ClearHflag()
+            cpu.ClearCflag()
+
+            cpu.Registers.A = result
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.OR_C:
+            // Performs a bitwise OR operation between the 8-bit A register and the 8-bit register r, and
+            // stores the result back into the A register.
+
+            result := cpu.Registers.A | cpu.Registers.C
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+            cpu.ClearNflag()
+            cpu.ClearHflag()
+            cpu.ClearCflag()
+
+            cpu.Registers.A = result
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        
+        case instructions.OR_D:
+            // Performs a bitwise OR operation between the 8-bit A register and the 8-bit register r, and
+            // stores the result back into the A register.
+
+            result := cpu.Registers.A | cpu.Registers.D
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+            cpu.ClearNflag()
+            cpu.ClearHflag()
+            cpu.ClearCflag()
+
+            cpu.Registers.A = result
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        
+        case instructions.OR_E:
+            // Performs a bitwise OR operation between the 8-bit A register and the 8-bit register r, and
+            // stores the result back into the A register.
+
+            result := cpu.Registers.A | cpu.Registers.E
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+            cpu.ClearNflag()
+            cpu.ClearHflag()
+            cpu.ClearCflag()
+
+            cpu.Registers.A = result
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        
+        case instructions.OR_H:
+            // Performs a bitwise OR operation between the 8-bit A register and the 8-bit register r, and
+            // stores the result back into the A register.
+
+            result := cpu.Registers.A | cpu.Registers.H
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+            cpu.ClearNflag()
+            cpu.ClearHflag()
+            cpu.ClearCflag()
+
+            cpu.Registers.A = result
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        
+        case instructions.OR_L:
+            // Performs a bitwise OR operation between the 8-bit A register and the 8-bit register r, and
+            // stores the result back into the A register.
+
+            result := cpu.Registers.A | cpu.Registers.L
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+            cpu.ClearNflag()
+            cpu.ClearHflag()
+            cpu.ClearCflag()
+
+            cpu.Registers.A = result
+            // Length: 1 bytes, opcode.
+            // Cycles: 1 cycles, opcode.
+        case instructions.OR_indHL:
+
+            data := cpu.ReadByteFromMemory(&cycles, cpu.HL())
+            result := cpu.Registers.A | data
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+            cpu.ClearNflag()
+            cpu.ClearHflag()
+            cpu.ClearCflag()
+
+            cpu.Registers.A = result
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 2 cycles, opcode + R.
+        case instructions.OR_A:
+            // Performs a bitwise OR operation between the 8-bit A register and the 8-bit register r, and
+            // stores the result back into the A register.
+
+            result := cpu.Registers.A | cpu.Registers.A
             if result == 0 {
                 cpu.SetZflag()
             }else {
