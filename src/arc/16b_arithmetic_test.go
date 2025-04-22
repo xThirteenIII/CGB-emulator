@@ -2268,3 +2268,309 @@ func TestAND_AWorksWithZeroValue(t *testing.T) {
         t.Error("A register should be 0. Instead got: ", cpu.Registers.A)
     }
 }
+
+func TestXOR_B(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.B = 0x13
+    cpu.Memory.RAM[0x0100] = instructions.XOR_B
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 7)) != 0 {
+        t.Error("Z flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) != 0 {
+        t.Error("C flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x26 {
+        t.Error("A register should be 0x26. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestXOR_C(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.C = 0x13
+    cpu.Memory.RAM[0x0100] = instructions.XOR_C
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 7)) != 0 {
+        t.Error("Z flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) != 0 {
+        t.Error("C flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x26 {
+        t.Error("A register should be 0x26. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestXOR_D(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.D = 0x13
+    cpu.Memory.RAM[0x0100] = instructions.XOR_D
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 7)) != 0 {
+        t.Error("Z flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) != 0 {
+        t.Error("C flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x26 {
+        t.Error("A register should be 0x26. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestXOR_E(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.E = 0x13
+    cpu.Memory.RAM[0x0100] = instructions.XOR_E
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 7)) != 0 {
+        t.Error("Z flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) != 0 {
+        t.Error("C flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x26 {
+        t.Error("A register should be 0x26. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestXOR_H(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.H = 0x13
+    cpu.Memory.RAM[0x0100] = instructions.XOR_H
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 7)) != 0 {
+        t.Error("Z flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) != 0 {
+        t.Error("C flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x26 {
+        t.Error("A register should be 0x26. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestXOR_L(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.L = 0x13
+    cpu.Memory.RAM[0x0100] = instructions.XOR_L
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 7)) != 0 {
+        t.Error("Z flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) != 0 {
+        t.Error("C flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x26 {
+        t.Error("A register should be 0x26. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestXOR_A(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.A = 0x35
+    cpu.Memory.RAM[0x0100] = instructions.XOR_A
+
+    expectedCycles := 1
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 7)) == 0 {
+        t.Error("Z flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) != 0 {
+        t.Error("C flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x00 {
+        t.Error("A register should be 0. Instead got: ", cpu.Registers.A)
+    }
+}
+
+func TestXOR_indHL(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Registers.H = 0x99
+    cpu.Registers.L = 0x13
+    cpu.Memory.RAM[0x0100] = instructions.XOR_indHL
+    cpu.Memory.RAM[0x9913] = 0x13
+
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 7)) != 0 {
+        t.Error("Z flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) != 0 {
+        t.Error("C flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) != 0 {
+        t.Error("H flag should be 0.")
+    }
+
+    if cpu.Registers.A != 0x26 {
+        t.Error("A register should be 0x11. Instead got: ", cpu.Registers.A)
+    }
+}
