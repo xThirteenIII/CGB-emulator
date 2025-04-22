@@ -3214,3 +3214,42 @@ func TestADD_d8(t *testing.T) {
     }
 }
 
+func TestADC_d8(t *testing.T) {
+
+    // Given
+    cpu := InitSM83()
+
+    // When
+    cpu.Registers.A = 0x35
+    cpu.Memory.RAM[0x0100] = instructions.CCF
+    // flag C is set
+    cpu.Memory.RAM[0x0101] = instructions.ADC_d8
+    cpu.Memory.RAM[0x0102] = 0xCA
+
+    expectedCycles := 1 + 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if (cpu.Registers.F & (1 << 6)) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if (cpu.Registers.F & (1 << 7)) == 0 {
+        t.Error("Z flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 5)) == 0 {
+        t.Error("H flag should be 1.")
+    }
+
+    if (cpu.Registers.F & (1 << 4)) == 0 {
+        t.Error("C flag should be 1.")
+    }
+
+    if cpu.Registers.A != 0x00 {
+        t.Error("A register should be 0. Instead got: ", cpu.Registers.A)
+    }
+}

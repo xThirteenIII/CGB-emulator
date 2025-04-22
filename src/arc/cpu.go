@@ -2376,6 +2376,27 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             cpu.Registers.A = result
             // Length: 2 bytes, opcode.
             // Cycles: 2 cycles, opcode + R
+        case instructions.ADC_d8:
+            // Adds to the 8-bit A register, the carry flag and the immediate data n,
+            // and stores the result back into the A register.
+            data := cpu.FetchByte(&cycles)
+            result, flags := AddByteToByteWithCarry(cpu.Registers.A, data, cpu.Registers.F)
+            cpu.Registers.A = result
+
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            if result == 0 {
+                cpu.SetZflag()
+            }else {
+                // Just to be sure Z is cleared
+                cpu.ClearZflag()
+            }
+
+            cpu.ClearNflag()
+            // Length: 2 bytes, opcode.
+            // Cycles: 2 cycles, opcode + R
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)
