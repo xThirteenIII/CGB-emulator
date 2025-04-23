@@ -207,3 +207,42 @@ func TestADDHL_DESetsHandCFlags(t *testing.T) {
         t.Error("HL should be 0x124F. Instead got: ", cpu.HL())
     }
 }
+
+func TestADDSP_e(t *testing.T) {
+
+    // Given
+    cpu := InitSM83() 
+
+    // When
+    // SP = 0xFFFE
+    cpu.Memory.RAM[0x0100] = instructions.ADDSP_e
+    cpu.Memory.RAM[0x0101] = 0xFB // (-5)
+
+    expectedCycles := 4
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    // Then
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.Registers.F & (1 << 7) != 0 {
+        t.Error("Z flag should be 0.")
+    }
+
+    if cpu.Registers.F & (1 << 6) != 0 {
+        t.Error("N flag should be 0.")
+    }
+
+    if cpu.Registers.F & (1 << 5) == 0 {
+        t.Error("H flag should be 1.")
+    }
+
+    if cpu.Registers.F & (1 << 4) == 0 {
+        t.Error("C flag should be 1.")
+    }
+
+    if cpu.Registers.SP != 0xFFF9{
+        t.Error("HL should be 0xFFF9. Instead got: ", cpu.HL())
+    }
+}

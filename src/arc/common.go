@@ -41,7 +41,7 @@ func Decrement16Address(lsb , msb *byte) {
     *lsb = byte(absoluteAddress & 0xFF)
 }
 
-// AddInt8ToUint16WithoutCarry adds the signed 8-bit byte to the unsigned uint16. 
+// AddInt8ToUint16WithoutCarry adds the signed 8-bit byte to the unsigned uint16 value.
 // It returns the result of the operation and a byte with Carry and HalfCarry set according 
 // to operation result.
 func AddInt8ToUint16WithoutCarry(value uint16, adder int8) (uint16, byte) {

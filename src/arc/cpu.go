@@ -2626,6 +2626,22 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             cycles--
             // Length: 1 bytes, opcode.
             // Cycles: 2 cycles, opcode + ?
+        case instructions.ADDSP_e:
+            // Loads to the 16-bit SP register, 16-bit data calculated by adding
+            // the signed 8-bit operand e to the 16-bit value of the SP register.
+            signed8 := int8(cpu.FetchByte(&cycles))
+            result, flags := AddInt8ToUint16WithoutCarry(cpu.Registers.SP, signed8)
+            cpu.ClearZflag()
+            cpu.ClearNflag()
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            cpu.Registers.SP = result
+            // Length: 2 bytes, opcode + e
+            // Cycles: 4 cycles, opcode + R + ? + ?
+            cycles--
+            cycles--
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)
