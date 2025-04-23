@@ -2525,6 +2525,7 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
         case instructions.INC_BC:
 
             Increment16Address(&cpu.Registers.C, &cpu.Registers.B)
+            cycles--
             // Length: 1 bytes, opcode.
             // Cycles: 2 cycles, opcode + ?
         case instructions.ADDHL_BC:
@@ -2541,6 +2542,12 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
 
             // Length: 1 bytes, opcode.
             // Cycles: 2 cycles, opcode + ?.
+        case instructions.DEC_BC:
+
+            Decrement16Address(&cpu.Registers.C, &cpu.Registers.B)
+            cycles--
+            // Length: 1 bytes, opcode.
+            // Cycles: 2 cycles, opcode + ?
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)

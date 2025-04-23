@@ -78,3 +78,49 @@ func TestADDHL_BCSetsHandCFlags(t *testing.T) {
         t.Error("HL should be 0x124F. Instead got: ", cpu.HL())
     }
 }
+
+func TestINC_BC(t *testing.T) {
+
+    // Given
+    cpu := InitSM83() 
+
+    // When
+    cpu.Registers.B = 0x25
+    cpu.Registers.C = 0x26
+    cpu.Memory.RAM[0x0100] = instructions.INC_BC
+
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    // Then
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.BC() != 0x2527 {
+        t.Error("HL should be 0x2527. Instead got: ", cpu.BC())
+    }
+}
+
+func TestDEC_BC(t *testing.T) {
+
+    // Given
+    cpu := InitSM83() 
+
+    // When
+    cpu.Registers.B = 0x25
+    cpu.Registers.C = 0x26
+    cpu.Memory.RAM[0x0100] = instructions.DEC_BC
+
+    expectedCycles := 2
+    cyclesUsed := cpu.Execute(expectedCycles)
+
+    // Then
+    if cyclesUsed != expectedCycles {
+        t.Error("Cycles used: ", cyclesUsed, " cycles expected: ", expectedCycles)
+    }
+
+    if cpu.BC() != 0x2525 {
+        t.Error("HL should be 0x2525. Instead got: ", cpu.BC())
+    }
+}
