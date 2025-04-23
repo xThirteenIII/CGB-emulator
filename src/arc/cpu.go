@@ -2522,6 +2522,25 @@ func (cpu *CPU) Execute(cycles int) (cyclesUsed int) {
             }
 
             cpu.SetNflag()
+        case instructions.INC_BC:
+
+            Increment16Address(&cpu.Registers.C, &cpu.Registers.B)
+            // Length: 1 bytes, opcode.
+            // Cycles: 2 cycles, opcode + ?
+        case instructions.ADDHL_BC:
+
+            result, flags := AddWordToWordWithoutCarry(cpu.HL(), cpu.BC())
+            cpu.ClearNflag()
+            cpu.Registers.F = 0x00
+            cpu.Registers.F |= flags & (1 << 5) // Set Half-Carry if present.
+            cpu.Registers.F |= flags & (1 << 4) // Set Carry if present
+
+            cpu.Registers.H = byte(result >> 8)
+            cpu.Registers.L = byte(result & 0xFF)
+            cycles--
+
+            // Length: 1 bytes, opcode.
+            // Cycles: 2 cycles, opcode + ?.
         default:
 
             log.Println("At memory address: ", cpu.Registers.PC)

@@ -116,6 +116,29 @@ func AddByteToByteWithoutCarry(b , b1 byte) (byte, byte) {
     return b + b1, carryPerBit
 }
 
+// AddByteToByteWithoutCarry adds b1 to b.
+// It returns the result of the operation and a byte with Carry and HalfCarry bits set according 
+// to operation result.
+func AddWordToWordWithoutCarry(w , w1 uint16) (uint16, byte) {
+
+    carryPerBit := byte(0)
+
+    // Isolate 12 lower bits of the 16bit address and the signed 8bit.
+    if ((w&0x0FFF) + (w1 & 0x0FFF)) > 0x0FFF {
+
+        // Set halfCarryBit, which is bit 5
+        carryPerBit |= 1 << 5
+    }
+
+    if uint32(w) + uint32(w1) > 0xFFFF {
+
+        // Set CarryBit, which is bit 4
+        carryPerBit |= 1 << 4 // that is: | 0b00010000
+    }
+
+    return w + w1, carryPerBit
+}
+
 // SubByteFromByteWithCarry subtracts b1 from b.
 // It returns the result of the operation and a byte with Carry and HalfCarry bits set according 
 // to operation result.
